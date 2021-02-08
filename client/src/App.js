@@ -1,24 +1,27 @@
-import logo from './logo.svg';
+import { render } from 'react-dom';
+import {BrowserRouter as Router,Switch,Route} from 'react-router-dom';
+import React,{Fragment,useState} from 'react';
+import Navbar from './components/layout/Navbar'
+import Upcoming from './components/matches/Upcoming'
 import './App.css';
+import {Provider} from 'react-redux';
+import store from './store';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Provider store={store}>
+      <Router>
+        <div>
+          <Navbar title='Dream Arena'/>
+          <div className='container'>
+            <Switch>
+              <Route exact path='/upcoming' component={Upcoming}/>
+            </Switch>
+          </div>
+        </div>
+      </Router>
+    </Provider>
+      
   );
 }
 
