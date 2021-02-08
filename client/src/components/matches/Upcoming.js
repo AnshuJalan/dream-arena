@@ -1,11 +1,26 @@
 import React,{useState,useEffect} from 'react';
 import {connect} from 'react-redux';
+import { makeStyles } from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
 import Match from './Match';
 import Preloader from '../layout/Preloader';
 import PropTypes from 'prop-types';
 import {getMatches} from '../../actions/getMatchActions';
 
+const useStyles = makeStyles((theme) => ({
+    root: {
+      flexGrow: 1,
+    },
+    paper: {
+      padding: theme.spacing(2),
+      textAlign: 'center',
+      color: theme.palette.text.secondary,
+    },
+  }));
+
 export const Upcoming = ({matches:{matches,loading},getMatches}) => {
+    const classes = useStyles();
     useEffect(()=>{
         getMatches();
         //eslint-disable-next-line
@@ -14,27 +29,22 @@ export const Upcoming = ({matches:{matches,loading},getMatches}) => {
     if(loading || matches===null){
         return <Preloader/>;
     }
+    
     return (
-        <div className="collection">
-            <div className="collection">
-                <h4 className="center">Upcoming Matches</h4>
-            </div>
-            <div style={userStyle}>
+        
+        <div className={classes.root}>
+            <h4 className="center">Upcoming Matches</h4>
+            <Grid container spacing={10}>
                 {!loading && matches.length===0? (<p className="center">No Matches to show....</p>):(
-                    matches.map(match => <Match match={match}/>)
+                        matches.map(match => <Grid item xs={6}>
+                            <Paper className={classes.paper}><Match match={match}/></Paper>
+                            </Grid>)
                 )}
-            </div>
-            
-
+            </Grid>
         </div>
     )
 }
 
-const userStyle={
-    display:'grid',
-    gridTemplateColumns:'repeat(3, 5fr)',
-    gridGap:'3 rem'
-}
 
 Upcoming.propTypes={
     matches:PropTypes.object.isRequired

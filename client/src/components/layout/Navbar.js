@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Link} from 'react-router-dom';
+import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -8,17 +9,20 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 
-
-const Navbar = (props) =>{
+const useStyles = makeStyles((theme) => ({
+    root: {
+      flexGrow: 1,
+    },
+    menuButton: {
+      marginRight: theme.spacing(2),
+    },
+    title: {
+      flexGrow: 1,
+    },
+  }));
+const Navbar = () =>{
+    const classes = useStyles();
     return(
-        // <nav>
-        //     <div class="nav-wrapper">
-        //         <a href="#" class="brand-logo">Dream Arena</a>
-        //         <ul id="nav-mobile" class="right hide-on-med-and-down">
-        //             <li><Link to='/upcoming'>Upcoming</Link></li>
-        //         </ul>
-        //     </div>
-        // </nav>
         <div className={classes.root}>
             <AppBar position="static">
                 <Toolbar>
@@ -26,21 +30,13 @@ const Navbar = (props) =>{
                     <MenuIcon />
                 </IconButton>
                 <Typography variant="h6" className={classes.title}>
-                    News
+                    Dream Arena
                 </Typography>
-                <Button color="inherit">Login</Button>
+                <Link to='/upcoming'><Button color="inherit"><span style={{color:"white"}}>Upcoming</span></Button></Link>
                 </Toolbar>
             </AppBar>
         </div>
     );
 }
-Navbar.defaultProps={
-    title:'Dream Arena',
-};
-Navbar.propTypes={
-    title:PropTypes.string.isRequired,
-    // icon:PropTypes.string.isRequired
-
-};
 
 export default Navbar

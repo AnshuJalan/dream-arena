@@ -12,7 +12,7 @@ function App() {
     <Provider store={store}>
       <Router>
         <div>
-          <Navbar title='Dream Arena'/>
+          <Navbar/>
           <div className='container'>
             <Switch>
               <Route exact path='/upcoming' component={Upcoming}/>
