@@ -1,0 +1,3 @@
+export const GET_MATCHES='GET_MATCHES';
+export const SET_LOADING='SET_LOADING';
+export const MATCHES_ERROR='MATCHES_ERROR';
