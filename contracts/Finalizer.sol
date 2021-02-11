@@ -14,16 +14,11 @@ contract Finalizer is ChainlinkClient {
 
   mapping(bytes32 => uint256) requestIdToMatch;
 
-  /**
-   * @param _oracle The address of the chainlink oracle
-   * @param _jobID The unique id of the adapters job
-   * @param _fee The amount of LINK tokens required for requesting
-  */
-  constructor(address _oracle, bytes32 _jobID, uint256 _fee) public {
+  constructor() public {
     setPublicChainlinkToken();
-    oracle = _oracle;
-    jobId = _jobID;
-    fee = _fee;
+    oracle = 0x56dd6586DB0D08c6Ce7B2f2805af28616E082455;
+    jobId = "b6602d14e4734c49a5e1ce19d45a4632";
+    fee = 0.1 * 10 ** 18;
   }
 
   /**

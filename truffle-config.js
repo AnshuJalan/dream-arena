@@ -12,9 +12,12 @@ module.exports = {
       port: 7545,
       network_id: "*",
     },
-    live: {
+    kovan: {
       provider: () => {
-        return new HDWalletProvider(process.env.MNEMONIC, process.env.RPC_URL);
+        return new HDWalletProvider(
+          "trust stage foster bundle usual letter veteran claw fat rebuild artefact flip",
+          "https://kovan.infura.io/v3/9af628a1de16445dac2e54ae3176798a"
+        );
       },
       network_id: "*",
       // ~~Necessary due to https://github.com/trufflesuite/truffle/issues/1971~~
