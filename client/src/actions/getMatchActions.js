@@ -3,8 +3,12 @@ import axios from 'axios';
 export const getMatches=()=> async dispatch => {
     try{
         setLoading();
-        const res=await axios.get(`https://api.pandascore.co/matches/upcoming?token=4AUFMvQbjLwRnnuM5NLQqVwj8WPu-wQgNssRZjpV9WDDjnvNI68`);
-
+        const config = {
+            method: 'get',
+            url: 'https://api.pandascore.co/matches/upcoming?token=4AUFMvQbjLwRnnuM5NLQqVwj8WPu-wQgNssRZjpV9WDDjnvNI68',
+        }
+        const res=await axios(config);
+        console.log(res);
         dispatch({
             type:GET_MATCHES,
             payload:res.data

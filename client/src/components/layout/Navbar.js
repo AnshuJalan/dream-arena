@@ -19,12 +19,21 @@ const useStyles = makeStyles((theme) => ({
     title: {
       flexGrow: 1,
     },
+    btn:{
+      backgroundColor:"inherit",
+      "&:hover":{
+        backgroundColor:"rgba(255, 255, 255, 0.08)"
+      },
+      "&:click":{
+        backgroundColor:"inherit"
+      }
+    }
   }));
 const Navbar = () =>{
     const classes = useStyles();
     return(
         <div className={classes.root}>
-            <AppBar position="static">
+            <AppBar position="static" color="transparent">
                 <Toolbar>
                 <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
                     <MenuIcon />
@@ -32,7 +41,7 @@ const Navbar = () =>{
                 <Typography variant="h6" className={classes.title}>
                     Dream Arena
                 </Typography>
-                <Link to='/upcoming'><Button color="inherit"><span style={{color:"white"}}>Upcoming</span></Button></Link>
+                <Link to='/upcoming'><Button className={classes.btn}><span style={{color:"white"}}>Upcoming</span></Button></Link>
                 </Toolbar>
             </AppBar>
         </div>
