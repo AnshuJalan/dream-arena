@@ -34,11 +34,15 @@ export const Upcoming = ({matches:{matches,loading},getMatches}) => {
         
         <div className={classes.root}>
             <h4 className="center">Upcoming Matches</h4>
-            <Grid container spacing={10}>
+            <Grid container spacing={3}>
                 {!loading && matches.length===0? (<p className="center">No Matches to show....</p>):(
-                        matches.map(match => <Grid item xs={6}>
-                            <Paper className={classes.paper}><Match match={match}/></Paper>
-                            </Grid>)
+                        matches.map(match => 
+                            <Grid item xs={6}>
+                                    <Paper className={classes.paper} elevation={2}>
+                                        <Match match={match}/>
+                                    </Paper>
+                            </Grid>
+                        )
                 )}
             </Grid>
         </div>
