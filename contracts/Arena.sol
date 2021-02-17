@@ -161,6 +161,9 @@ contract Arena is Finalizer, Reputation{
     increaseRep(_match.admin);
   }
 
+  /**
+  * @notice allows the bettor to retrieve payout if they have won.
+  */
   function retrievePayout(uint256 _matchId, uint256 _odds) public {
     Match storage _match = idToMatch[_matchId];
     require(_match.ended, "match has not been closed");
@@ -194,7 +197,9 @@ contract Arena is Finalizer, Reputation{
     } 
   } 
 
-  //Margin call only owner
+  /**
+  * @notice allows the owner of the dapp, to margin call a bookie
+  */
   function marginCall(uint256 _matchId) public {
     require(msg.sender == owner, "not authorized");
     Match storage _match = idToMatch[_matchId];
@@ -211,7 +216,9 @@ contract Arena is Finalizer, Reputation{
     decreaseRep(_match.admin);
   }
 
-  //retrieveBookiePayout
+  /**
+  * @notice allows the admin of a match to retrieve the payout
+  */
   function retrieveBookiePayout(uint256 _matchId) onlyAdmin(_matchId) public {
     Match storage _match = idToMatch[_matchId];
     require(_match.ended, "match is yet to end");
@@ -220,6 +227,30 @@ contract Arena is Finalizer, Reputation{
     (bool success, ) = msg.sender.call.value(_amt)(""); 
     require(success, "transaction failed");
   }
+
+  /**
+  * @notice utility to help get the odds history 
+  */
+  function getOddsHistory(uint256 _matchId) public view returns(uint256[] memory, uint256[] memory) {
+    Match storage _match = idToMatch[_matchId];
+    return(_match.oddsHistoryA, _match.oddsHistoryB);
+  }
+
+  /**
+  * @notice utility to get the bet for a specific odds
+  */
+  function getBetA(uint256 _matchId, uint256 _odds) public view returns(uint256) {
+    Match storage _match = idToMatch[_matchId];
+    return _match.betA[msg.sender][_odds];
+  }
+
+  /**
+  * @notice utility to get the bet for a specific odds
+  */
+  function getBetB(uint256 _matchId, uint256 _odds) public view returns(uint256) {
+    Match storage _match = idToMatch[_matchId];
+    return _match.betB[msg.sender][_odds];
+  }  
 
   modifier onlyAdmin(uint256 _id) {
     Match storage _match  = idToMatch[_id];

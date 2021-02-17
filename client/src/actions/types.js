@@ -5,4 +5,4 @@ export const CONNECT_WEB3 = "CONNECT_WEB3";
 export const LOAD_CONTRACT = "LOAD_CONTRACT";
 export const GET_CONTRACT_MATCHES = "LOAD_CONTRACT_MATCHES";
 export const GET_CONTRACT_MATCH = "GET_CONTRACT_MATCH";
-export const GET_BETS = "LOAD_BETS";
+export const GET_BETS = "GET_BETS";
