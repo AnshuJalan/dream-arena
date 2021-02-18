@@ -25,10 +25,10 @@ export default function ImageAvatars({link,letter,index}) {
   array.push("#ff2e2e");
   array.push("#3877ff")
   return (
-    <div className={classes.root}>
+    <div style={{alignItems:"center",justifyContent:"center"}} className={classes.root}>
       {
         link ? <Avatar alt="Remy Sharp" src={link} className={classes.large} variant="rounded"/>
-          : <Avatar style={{backgroundColor:array[index],color:"white",fontSize:"1.5rem"}} variant="rounded">{letter}</Avatar>
+          : <Avatar className={classes.large} style={{backgroundColor:array[index],color:"white",fontSize:"1.5rem"}} variant="rounded">{letter}</Avatar>
       }
     </div>
   );

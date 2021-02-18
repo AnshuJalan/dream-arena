@@ -29,11 +29,10 @@ const Match = ({ match }) => {
   return (
     <div>
       <Grid container spacing={3} alignItems="center" justify="center">
-        <Grid  style={{alignItems:"center",justify:"center"}} item xs={4} >
+        <Grid item xs={4} >
           {apiData.opponents.length != 0 &&
           apiData.opponents[0].opponent.image_url ? (
             <Avt
-              style={{alignItems:"center",justifyContent:"center"}}
               link={apiData.opponents[0].opponent.image_url}
               letter={null}
               index={0}
