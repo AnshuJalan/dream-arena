@@ -28,4 +28,4 @@ export const setLoading = () => {
   };
 };
 
-export default getMatches;
+//export default getMatches;

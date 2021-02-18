@@ -1,5 +1,6 @@
 export const GET_MATCHES = "GET_MATCHES";
 export const SET_LOADING = "SET_LOADING";
+export const MATCHES_LOADING = "MATCHES_LOADING";
 export const MATCHES_ERROR = "MATCHES_ERROR";
 export const CONNECT_WEB3 = "CONNECT_WEB3";
 export const LOAD_CONTRACT = "LOAD_CONTRACT";
