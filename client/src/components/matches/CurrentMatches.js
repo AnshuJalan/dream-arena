@@ -41,7 +41,7 @@ export const Current = ({
           <p className="center">No Current Matches to show....</p>
         ) : (
           matches.map((match, index) => (
-            <Grid key={index} item xs={6}>
+            <Grid key={index} item xs={12} sm={6}>
               <Paper className={classes.paper} elevation={2}>
                 <CurrentMatch match={match} />
               </Paper>

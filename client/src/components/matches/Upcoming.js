@@ -38,7 +38,7 @@ export const Upcoming = ({ api: { matches, loading }, getMatches }) => {
           <p className="center">No Matches to show....</p>
         ) : (
           matches.map((match, index) => (
-            <Grid key={index} item xs={6}>
+            <Grid key={index} item xs={12} sm={6}>
               <Paper className={classes.paper} elevation={2}>
                 <Match match={match} />
               </Paper>

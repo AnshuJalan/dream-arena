@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import Grid from "@material-ui/core/Grid";
 import Avt from "../layout/AvatarImg";
+import "../../App.css";
 
 const Match = ({ match }) => {
   const [apiData, setApiData] = useState(null);
@@ -28,10 +29,11 @@ const Match = ({ match }) => {
   return (
     <div>
       <Grid container spacing={3} alignItems="center" justify="center">
-        <Grid item xs={4}>
+        <Grid  style={{alignItems:"center",justify:"center"}} item xs={4} >
           {apiData.opponents.length != 0 &&
           apiData.opponents[0].opponent.image_url ? (
             <Avt
+              style={{alignItems:"center",justifyContent:"center"}}
               link={apiData.opponents[0].opponent.image_url}
               letter={null}
               index={0}
@@ -65,8 +67,9 @@ const Match = ({ match }) => {
         <Grid item xs={12}>
           <h5>{apiData.name}</h5>
         </Grid>
-        <Grid item xs={12}>
-          <h5>{match.admin}</h5>
+        <Grid style={{overflow:"scroll"}} item xs={12}>
+          <h6>Admin</h6>
+          <h7 >{match.admin}</h7>
         </Grid>
       </Grid>
       {/* <Link to={`/user/${login}`} className='btn btn-dark'>More</Link>

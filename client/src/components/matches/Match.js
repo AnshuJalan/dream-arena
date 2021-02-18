@@ -4,6 +4,7 @@ import {Link} from 'react-router-dom'
 import Grid from "@material-ui/core/Grid"
 import Avt from "../layout/AvatarImg"
 export const Match = ({match}) => {
+    const res=match.name.split(" ");
     return (
         <div>
             {/* <img src={match.league.image_url} alt='' style={{width:'60px',borderRadius:"50%"}}/> */}
