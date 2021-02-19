@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
-import Match from "./Match";
+import Match from "./UpcomingMatchCard";
 import Preloader from "../layout/Preloader";
 import PropTypes from "prop-types";
 import { getMatches } from "../../actions/apiActions";

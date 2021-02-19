@@ -6,7 +6,7 @@ import Grid from "@material-ui/core/Grid";
 import Avt from "../layout/AvatarImg";
 import "../../App.css";
 
-const Match = ({ match }) => {
+const MatchCard = ({ match }) => {
   const [apiData, setApiData] = useState(null);
 
   const { apiUrl } = match;
@@ -29,7 +29,7 @@ const Match = ({ match }) => {
   return (
     <div>
       <Grid container spacing={3} alignItems="center" justify="center">
-        <Grid item xs={4} >
+        <Grid item xs={4}>
           {apiData.opponents.length != 0 &&
           apiData.opponents[0].opponent.image_url ? (
             <Avt
@@ -66,9 +66,9 @@ const Match = ({ match }) => {
         <Grid item xs={12}>
           <h5>{apiData.name}</h5>
         </Grid>
-        <Grid style={{overflow:"scroll"}} item xs={12}>
+        <Grid style={{ overflow: "scroll" }} item xs={12}>
           <h6>Admin</h6>
-          <h7 >{match.admin}</h7>
+          <h7>{match.admin}</h7>
         </Grid>
       </Grid>
       {/* <Link to={`/user/${login}`} className='btn btn-dark'>More</Link>
@@ -78,8 +78,8 @@ const Match = ({ match }) => {
   );
 };
 
-Match.propTypes = {
+MatchCard.propTypes = {
   match: PropTypes.object.isRequired,
 };
 
-export default Match;
+export default MatchCard;

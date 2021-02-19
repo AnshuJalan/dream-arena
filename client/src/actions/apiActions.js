@@ -1,14 +1,10 @@
 import { GET_MATCHES, SET_LOADING, MATCHES_ERROR } from "./types";
-import axios from "axios";
+import dataApi from "../api";
+
 export const getMatches = () => async (dispatch) => {
   try {
     setLoading();
-    const config = {
-      method: "get",
-      url:
-        "https://api.pandascore.co/matches/upcoming?token=4AUFMvQbjLwRnnuM5NLQqVwj8WPu-wQgNssRZjpV9WDDjnvNI68",
-    };
-    const res = await axios(config);
+    const res = await dataApi.get("/upcoming");
     dispatch({
       type: GET_MATCHES,
       payload: res.data,

@@ -52,7 +52,7 @@ const Navbar = ({ connectWeb3 }) => {
           <Typography variant="h6" className={classes.title}>
             Dream Arena
           </Typography>
-          <Link to="/current">
+          <Link to="/matches">
             <Button className={classes.btn}>
               <span style={{ color: "white" }}>Matches</span>
             </Button>
