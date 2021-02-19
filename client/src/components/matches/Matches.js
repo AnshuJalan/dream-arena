@@ -36,7 +36,6 @@ export const Matches = ({
 
   return (
     <div className={classes.root}>
-      <h4 className="center">Current Matches</h4>
       <Grid container spacing={3}>
         {matches.length === 0 ? (
           <p className="center">No Current Matches to show....</p>

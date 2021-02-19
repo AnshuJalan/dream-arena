@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import Grid from "@material-ui/core/Grid";
+import { Grid, Paper, Button } from "@material-ui/core";
 import Avt from "../layout/AvatarImg";
 import "../../App.css";
 
@@ -22,58 +22,87 @@ const MatchCard = ({ match }) => {
     })();
   }, [apiUrl]);
 
-  if (apiData === null) return <p>Loading...</p>;
+  const getDetails = (team) => {
+    const opp = apiData.opponents[team].opponent;
 
-  console.log(apiData);
+    return (
+      <div>
+        {opp.image_url ? (
+          <Avt link={opp.image_url} letter={null} index={team} />
+        ) : (
+          <Avt link={null} letter={opp.name[0]} index={team} />
+        )}
+        <span style={{ fontSize: "15px", fontWeight: "bold" }}>{opp.name}</span>
+      </div>
+    );
+  };
+
+  if (apiData === null) return <p>Loading...</p>;
 
   return (
     <div>
       <Grid container spacing={3} alignItems="center" justify="center">
-        <Grid item xs={4}>
-          {apiData.opponents.length != 0 &&
-          apiData.opponents[0].opponent.image_url ? (
-            <Avt
-              link={apiData.opponents[0].opponent.image_url}
-              letter={null}
-              index={0}
-            />
-          ) : (
-            <Avt
-              link={null}
-              letter={apiData.opponents[0].opponent.name[0]}
-              index={0}
-            />
-          )}
+        <Grid item xs={5}>
+          {getDetails(0)}
         </Grid>
-        <Grid item xs={4}></Grid>
-        <Grid item xs={4}>
-          {apiData.opponents.length > 0 &&
-          apiData.opponents[1] &&
-          apiData.opponents[1].opponent.image_url ? (
-            <Avt
-              link={apiData.opponents[1].opponent.image_url}
-              letter={null}
-              index={1}
-            />
-          ) : (
-            <Avt
-              link={null}
-              letter={apiData.opponents[0].opponent.name[0]}
-              index={1}
-            />
-          )}
+        <Grid item xs={2}>
+          VS
+        </Grid>
+        <Grid item xs={5}>
+          {getDetails(1)}
         </Grid>
         <Grid item xs={12}>
-          <h5>{apiData.name}</h5>
+          <Paper
+            style={{
+              height: "100%",
+              width: "100%",
+              backgroundColor: "#505050",
+              padding: "8px",
+            }}
+            elevation={0}
+          >
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <span
+                style={{ fontSize: "20px", marginRight: "5px" }}
+                class="material-icons"
+              >
+                casino
+              </span>
+              <span
+                style={{ fontSize: "15px", fontWeight: "bold" }}
+              >{`${match.oddsA / 100} : ${match.oddsB / 100}`}</span>
+              <span
+                style={{
+                  fontSize: "20px",
+                  marginLeft: "25px",
+                  marginRight: "5px",
+                }}
+                class="material-icons"
+              >
+                account_balance
+              </span>
+              <span style={{ fontSize: "15px" }}>
+                {match.totalCollection} ETH
+              </span>
+            </div>
+          </Paper>
         </Grid>
-        <Grid style={{ overflow: "scroll" }} item xs={12}>
-          <h6>Admin</h6>
-          <h7>{match.admin}</h7>
+        <Grid item xs={12}>
+          <Link to={`/matches/${match.id}`}>
+            <Button
+              style={{
+                backgroundColor: "#357a38",
+                color: "#ffffff",
+                fontWeight: "bold",
+              }}
+              variant="contained"
+              fullWidth
+            >
+              PLACE BET
+            </Button>
+          </Link>
         </Grid>
       </Grid>
-      {/* <Link to={`/user/${login}`} className='btn btn-dark'>More</Link>
-            <br></br>
-            <br></br> */}
     </div>
   );
 };

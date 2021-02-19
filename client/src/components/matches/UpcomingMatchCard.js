@@ -1,47 +1,95 @@
-import React from "react";
+import React, { Fragment } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
 import Avt from "../layout/AvatarImg";
+import { Button, Paper } from "@material-ui/core";
+
 export const UpcomingMatchCard = ({ match }) => {
-  const res = match.name.split(" ");
+  const getDetails = (team) => {
+    const opp = match.opponents[team].opponent;
+
+    return (
+      <div>
+        {opp.image_url ? (
+          <Avt link={opp.image_url} letter={null} index={team} />
+        ) : (
+          <Avt link={null} letter={opp.name[0]} index={team} />
+        )}
+        <span style={{ fontSize: "15px", fontWeight: "bold" }}>{opp.name}</span>
+      </div>
+    );
+  };
+
+  const getDateString = (ds) => {
+    const date = new Date(ds);
+
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        <span
+          style={{ fontSize: "15px", marginRight: "3px" }}
+          class="material-icons"
+        >
+          calendar_today
+        </span>
+        <span>{`${date.getMonth() +
+          1}-${date.getDate()}-${date.getFullYear()}`}</span>
+        <span
+          style={{ fontSize: "15px", marginRight: "3px", marginLeft: "15px" }}
+          class="material-icons"
+        >
+          schedule
+        </span>
+        <span>{`${date.getHours()}:${date.getMinutes()}`} UTC</span>
+      </div>
+    );
+  };
+
   return (
     <div>
       {/* <img src={match.league.image_url} alt='' style={{width:'60px',borderRadius:"50%"}}/> */}
       <Grid container spacing={3} alignItems="center" justify="center">
-        <Grid item xs={4}>
-          {match.opponents.length != 0 &&
-          match.opponents[0].opponent.image_url ? (
-            <Avt
-              link={match.opponents[0].opponent.image_url}
-              letter={null}
-              index={0}
-            />
-          ) : (
-            <Avt link={null} letter={res[0][0]} index={0} />
-          )}
+        <Grid item xs={5}>
+          {getDetails(0)}
         </Grid>
-        <Grid item xs={4}></Grid>
-        <Grid item xs={4}>
-          {match.opponents.length > 0 &&
-          match.opponents[1] &&
-          match.opponents[1].opponent.image_url ? (
-            <Avt
-              link={match.opponents[1].opponent.image_url}
-              letter={null}
-              index={1}
-            />
-          ) : (
-            <Avt link={null} letter={res[res.length - 1][0]} index={1} />
-          )}
+        <Grid item xs={2}>
+          VS
+        </Grid>
+        <Grid item xs={5}>
+          {getDetails(1)}
         </Grid>
         <Grid item xs={12}>
-          <h5>{match.name}</h5>
+          <Paper
+            style={{
+              height: "100%",
+              width: "100%",
+              backgroundColor: "#505050",
+              padding: "8px",
+            }}
+            elevation={0}
+          >
+            {getDateString(match.begin_at)}
+          </Paper>
+        </Grid>
+        <Grid item xs={12}>
+          <Button
+            style={{
+              backgroundColor: "#e94560",
+              color: "#ffffff",
+              fontWeight: "bold",
+            }}
+            variant="contained"
+            fullWidth
+          >
+            CREATE MATCH
+          </Button>
         </Grid>
       </Grid>
-      {/* <Link to={`/user/${login}`} className='btn btn-dark'>More</Link>
-            <br></br>
-            <br></br> */}
     </div>
   );
 };

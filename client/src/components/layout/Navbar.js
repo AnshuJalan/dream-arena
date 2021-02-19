@@ -14,6 +14,7 @@ import { connectWeb3 } from "../../actions/web3Actions";
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
+    marginBottom: "20px",
   },
   menuButton: {
     marginRight: theme.spacing(2),
