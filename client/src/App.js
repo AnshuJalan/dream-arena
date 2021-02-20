@@ -17,13 +17,16 @@ function App() {
       <Router forceRefresh history={history}>
         <Navbar />
         <Container maxWidth="md">
-          <div style={{ height: "92vh" }}>
+          <div style={{ height: "92vh", marginTop: "100px" }}>
             <Switch>
               <Route exact path="/upcoming" component={Upcoming} />
               <Route exact path="/matches" component={Matches} />
               <Route exact path="/matches/:id" component={MatchesShow} />
-              <Route exact path="/matches/:id/admin" component={MatchesShowAdmin} />
-
+              <Route
+                exact
+                path="/matches/:id/admin"
+                component={MatchesShowAdmin}
+              />
             </Switch>
           </div>
         </Container>

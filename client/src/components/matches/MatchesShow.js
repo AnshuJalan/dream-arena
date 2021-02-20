@@ -19,6 +19,7 @@ import {
 import { getContractMatch, getBets } from "../../actions/matchesActions";
 import axios from "axios";
 import Preloader from "../layout/Preloader";
+import history from "../../history";
 
 const MatchesShow = ({
   matches,
@@ -58,6 +59,10 @@ const MatchesShow = ({
 
   if (!match || !apiData) {
     return <Preloader />;
+  }
+
+  if (match.admin === account) {
+    history.push(`/matches/${match.id}/admin`);
   }
 
   const bet = async () => {
