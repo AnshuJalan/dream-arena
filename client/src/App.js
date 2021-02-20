@@ -7,19 +7,22 @@ import Matches from "./components/matches/Matches";
 import { Provider } from "react-redux";
 import store from "./store";
 import "./App.css";
+import { Container } from "@material-ui/core";
 
 function App() {
   return (
     <Provider store={store}>
       <Router>
         <Navbar />
-        <div style={{ height: "92vh" }} className="container">
-          <Switch>
-            <Route exact path="/upcoming" component={Upcoming} />
-            <Route exact path="/matches" component={Matches} />
-            <Route exact path="/matches/:id" component={MatchesShow} />
-          </Switch>
-        </div>
+        <Container maxWidth="md">
+          <div style={{ height: "92vh" }}>
+            <Switch>
+              <Route exact path="/upcoming" component={Upcoming} />
+              <Route exact path="/matches" component={Matches} />
+              <Route exact path="/matches/:id" component={MatchesShow} />
+            </Switch>
+          </div>
+        </Container>
       </Router>
     </Provider>
   );

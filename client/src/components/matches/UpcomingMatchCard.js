@@ -1,11 +1,14 @@
-import React, { Fragment } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
 import Avt from "../layout/AvatarImg";
 import { Button, Paper } from "@material-ui/core";
+import MatchModal from "./MatchModal";
 
 export const UpcomingMatchCard = ({ match }) => {
+  const [createModalOpen, setCreateModalOpen] = useState(false);
+
   const getDetails = (team) => {
     const opp = match.opponents[team].opponent;
 
@@ -29,6 +32,7 @@ export const UpcomingMatchCard = ({ match }) => {
         style={{
           display: "flex",
           justifyContent: "center",
+          alignItems: "center",
         }}
       >
         <span
@@ -83,6 +87,7 @@ export const UpcomingMatchCard = ({ match }) => {
               color: "#ffffff",
               fontWeight: "bold",
             }}
+            onClick={() => setCreateModalOpen(true)}
             variant="contained"
             fullWidth
           >
@@ -90,6 +95,11 @@ export const UpcomingMatchCard = ({ match }) => {
           </Button>
         </Grid>
       </Grid>
+      <MatchModal
+        open={createModalOpen}
+        setCreateModalOpen={setCreateModalOpen}
+        match={match}
+      />
     </div>
   );
 };
