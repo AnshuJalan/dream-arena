@@ -8,11 +8,12 @@ import { Provider } from "react-redux";
 import store from "./store";
 import "./App.css";
 import { Container } from "@material-ui/core";
+import history from "./history";
 
 function App() {
   return (
     <Provider store={store}>
-      <Router>
+      <Router forceRefresh history={history}>
         <Navbar />
         <Container maxWidth="md">
           <div style={{ height: "92vh" }}>

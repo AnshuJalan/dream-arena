@@ -1,10 +1,15 @@
-import { GET_CONTRACT_MATCHES, GET_CONTRACT_MATCH, GET_BETS, MATCHES_LOADING } from "./types";
+import {
+  GET_CONTRACT_MATCHES,
+  GET_CONTRACT_MATCH,
+  GET_BETS,
+  MATCHES_LOADING,
+} from "./types";
 
 export const getContractMatches = () => async (dispatch, getState) => {
   const contract = getState().ethereum.contract;
 
   try {
-    matchesLoading();
+    dispatch(matchesLoading());
     const uuid = await contract.methods.uuid().call();
 
     let matches = [];

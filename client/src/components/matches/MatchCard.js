@@ -5,6 +5,7 @@ import axios from "axios";
 import { Grid, Paper, Button } from "@material-ui/core";
 import Avt from "../layout/AvatarImg";
 import "../../App.css";
+import Preloader from "../layout/Preloader";
 
 const MatchCard = ({ match }) => {
   const [apiData, setApiData] = useState(null);
@@ -37,7 +38,7 @@ const MatchCard = ({ match }) => {
     );
   };
 
-  if (apiData === null) return <p>Loading...</p>;
+  if (apiData === null) return <Preloader />;
 
   return (
     <div>

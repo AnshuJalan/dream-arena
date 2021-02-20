@@ -22,13 +22,14 @@ const useStyles = makeStyles((theme) => ({
 export const Matches = ({
   matches: { matches, loading },
   getContractMatches,
+  contract,
 }) => {
   const classes = useStyles();
   useEffect(() => {
-    console.log("Here");
-    (async () => await getContractMatches())();
-    //eslint-disable-next-line
-  }, []);
+    (async () => {
+      if (contract && matches.length === 0) getContractMatches();
+    })();
+  }, [contract, getContractMatches, matches]);
 
   if (loading) {
     return <Preloader />;
@@ -59,6 +60,7 @@ Matches.propTypes = {
 
 const mapStateToProps = (state) => ({
   matches: state.matches,
+  contract: state.ethereum.contract,
 });
 
 export default connect(mapStateToProps, { getContractMatches })(Matches);

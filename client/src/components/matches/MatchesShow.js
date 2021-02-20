@@ -100,7 +100,7 @@ const MatchesShow = ({ matches, getContractMatch, contract }) => {
         <Card style={cardStyle}>
           <CardHeader title={<h5 style={cardHeader}>PLACE BET</h5>} />
           <CardContent style={{ height: "100%" }}>
-            <Grid style={{ height: "70%" }} container spacing={2}>
+            <Grid style={{ height: "65%" }} container spacing={2}>
               <Grid style={gridItemStyle} item xs={5} container>
                 {getImageSection(0)}
               </Grid>
@@ -110,19 +110,27 @@ const MatchesShow = ({ matches, getContractMatch, contract }) => {
               <Grid item xs={5} style={gridItemStyle} container>
                 {getImageSection(1)}
               </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  variant="outlined"
+                  label="Bet Amount in ETH"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Button
+                  style={{
+                    backgroundColor: "#357a38",
+                    color: "#ffffff",
+                    fontWeight: "bold",
+                  }}
+                  variant="contained"
+                  disableElevation
+                >
+                  PLACE BET
+                </Button>
+              </Grid>
             </Grid>
-            {/* TODO: Input */}
-            <Button
-              style={{
-                backgroundColor: "#357a38",
-                color: "#ffffff",
-                fontWeight: "bold",
-              }}
-              variant="contained"
-              disableElevation
-            >
-              PLACE BET
-            </Button>
           </CardContent>
         </Card>
       </Grid>
