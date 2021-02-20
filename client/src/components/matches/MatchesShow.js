@@ -10,12 +10,25 @@ import {
   Button,
   TextField,
   CircularProgress,
+  Table,
+  TableHead,
+  TableRow,
+  TableBody,
+  TableCell,
 } from "@material-ui/core";
-import { getContractMatch } from "../../actions/matchesActions";
+import { getContractMatch, getBets } from "../../actions/matchesActions";
 import axios from "axios";
 import Preloader from "../layout/Preloader";
 
-const MatchesShow = ({ matches, getContractMatch, contract, account }) => {
+const MatchesShow = ({
+  matches,
+  getContractMatch,
+  contract,
+  account,
+  getBets,
+  betsA,
+  betsB,
+}) => {
   const { id } = useParams();
 
   const [apiData, setApiData] = useState(null);
@@ -25,9 +38,12 @@ const MatchesShow = ({ matches, getContractMatch, contract, account }) => {
 
   useEffect(() => {
     (async () => {
-      if (contract) await getContractMatch(id);
+      if (contract) {
+        await getContractMatch(id);
+        await getBets(id);
+      }
     })();
-  }, [id, getContractMatch, contract]);
+  }, [id, getContractMatch, contract, getBets]);
 
   const match = matches[id];
 
@@ -113,6 +129,36 @@ const MatchesShow = ({ matches, getContractMatch, contract, account }) => {
     );
   };
 
+  const getTable = () => {
+    return (
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell style={{ fontWeight: "bold" }}>Team</TableCell>
+            <TableCell style={{ fontWeight: "bold" }}>Odds</TableCell>
+            <TableCell style={{ fontWeight: "bold" }}>ETH</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {Object.keys(betsA).map((key, index) => (
+            <TableRow key={index}>
+              <TableCell>{apiData.opponents[0].opponent.name}</TableCell>
+              <TableCell>{key / 100}</TableCell>
+              <TableCell>{(betsA[key] / 10 ** 18).toFixed(2)}</TableCell>
+            </TableRow>
+          ))}
+          {Object.keys(betsB).map((key, index) => (
+            <TableRow key={index}>
+              <TableCell>{apiData.opponents[1].opponent.name}</TableCell>
+              <TableCell>{key / 100}</TableCell>
+              <TableCell>{(betsB[key] / 10 ** 18).toFixed(2)}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    );
+  };
+
   return (
     <Grid style={{ height: "100%" }} container spacing={2}>
       <Grid style={gridItemStyle} item container xs={8}>
@@ -163,6 +209,26 @@ const MatchesShow = ({ matches, getContractMatch, contract, account }) => {
       <Grid style={gridItemStyle} item container xs={4}>
         <Card style={cardStyle}>
           <CardHeader title={<h5 style={cardHeader}>YOUR BETS</h5>} />
+          <CardContent
+            style={{
+              padding: "2px 15px",
+              display: "flex",
+              justifyContent: "space-between",
+              flexDirection: "column",
+              height: "83%",
+            }}
+          >
+            {getTable()}
+            <Button
+              style={{ fontWeight: "bold" }}
+              color="secondary"
+              variant="contained"
+              disabled
+              fullWidth
+            >
+              WITHDRAW PAYOUT
+            </Button>
+          </CardContent>
         </Card>
       </Grid>
     </Grid>
@@ -184,7 +250,11 @@ const mapStateToProps = (state) => {
     matches: state.matches,
     contract: state.ethereum.contract,
     account: state.ethereum.account,
+    betsA: state.bets.betsA,
+    betsB: state.bets.betsB,
   };
 };
 
-export default connect(mapStateToProps, { getContractMatch })(MatchesShow);
+export default connect(mapStateToProps, { getContractMatch, getBets })(
+  MatchesShow
+);

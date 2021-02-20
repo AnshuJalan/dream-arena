@@ -48,22 +48,31 @@ export const getContractMatch = (id) => async (dispatch, getState) => {
 
 export const getBets = (id) => async (dispatch, getState) => {
   const contract = getState().ethereum.contract;
+  const account = getState().ethereum.account;
 
   try {
     const history = await contract.methods.getOddsHistory(id).call();
 
-    let betsA = [];
-    let betsB = [];
+    let betsA = {};
+    let betsB = {};
 
     //Bets for team A
     for (let odds = 0; odds < history[0].length; odds++) {
-      const bet = await contract.methods.getBetA(id, history[0][odds]).call();
-      if (bet !== "0") betsA.push(bet);
+      betsA[history[0][odds]] = 0;
+      const bet = await contract.methods.getBetA(id, history[0][odds]).call({
+        from: account,
+      });
+      if (bet !== "0") betsA[history[0][odds]] = bet;
+      else delete betsA[history[0][odds]];
     }
     //Bets for team B
     for (let odds = 0; odds < history[1].length; odds++) {
-      const bet = await contract.methods.getBetB(id, history[1][odds]).call();
-      if (bet !== "0") betsB.push(bet);
+      betsB[history[1][odds]] = 0;
+      const bet = await contract.methods.getBetB(id, history[1][odds]).call({
+        from: account,
+      });
+      if (bet !== "0") betsB[history[1][odds]] = bet;
+      else delete betsB[history[1][odds]];
     }
 
     dispatch({
