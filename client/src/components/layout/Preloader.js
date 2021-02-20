@@ -1,12 +1,19 @@
-import React from 'react'
+import { CircularProgress } from "@material-ui/core";
+import React from "react";
 
 export const Preloader = () => {
-    return (
-        <div className="progress blue lighten-4">
-            <div className='indeterminate blue'></div>
-            
-        </div>
-    )
-}
+  return (
+    <div
+      style={{
+        height: "90%",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <CircularProgress style={{ color: "white" }} />
+    </div>
+  );
+};
 
 export default Preloader;

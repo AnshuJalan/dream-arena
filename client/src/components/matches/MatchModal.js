@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Button,
   Grid,
@@ -6,10 +6,46 @@ import {
   Modal,
   Paper,
   TextField,
+  CircularProgress,
 } from "@material-ui/core";
+import { connect } from "react-redux";
 import Avt from "../layout/AvatarImg";
+import history from "../../history";
 
-const MatchModal = ({ open, setCreateModalOpen, match }) => {
+const MatchModal = ({ open, setCreateModalOpen, match, contract, account }) => {
+  const [loading, setLoading] = useState(false);
+  const [oddsA, setOddsA] = useState();
+  const [oddsB, setOddsB] = useState();
+  const [margin, setMargin] = useState();
+
+  const createMatch = async () => {
+    const opp1 = match.opponents[0].opponent;
+    const opp2 = match.opponents[1].opponent;
+    const url = `https://api.pandascore.co/matches/${match.slug}?token=4AUFMvQbjLwRnnuM5NLQqVwj8WPu-wQgNssRZjpV9WDDjnvNI68`;
+
+    try {
+      setLoading(true);
+      await contract.methods
+        .createMatch(
+          opp1.id,
+          opp2.id,
+          parseInt(oddsA * 100),
+          parseInt(oddsB * 100),
+          url
+        )
+        .send({
+          value: parseInt(margin * 10 ** 18),
+          from: account,
+        });
+      setLoading(false);
+      history.push("/matches");
+      setCreateModalOpen(false);
+    } catch (err) {
+      alert(err.message);
+    }
+    setLoading(false);
+  };
+
   const getImage = (team) => {
     const opp = match.opponents[team].opponent;
 
@@ -64,17 +100,45 @@ const MatchModal = ({ open, setCreateModalOpen, match }) => {
               {getImage(1)}
             </Grid>
             <Grid item xs={6}>
-              <TextField variant="outlined" fullWidth label="Odds Team A" />
+              <TextField
+                value={oddsA}
+                onChange={(e) => setOddsA(e.target.value)}
+                variant="outlined"
+                fullWidth
+                label="Odds Team A"
+              />
             </Grid>
             <Grid item xs={6}>
-              <TextField variant="outlined" fullWidth label="Odds Team B" />
+              <TextField
+                value={oddsB}
+                onChange={(e) => setOddsB(e.target.value)}
+                variant="outlined"
+                fullWidth
+                label="Odds Team B"
+              />
             </Grid>
             <Grid item xs={12}>
-              <TextField variant="outlined" fullWidth label="Initial Margin" />
+              <TextField
+                value={margin}
+                onChange={(e) => setMargin(e.target.value)}
+                variant="outlined"
+                fullWidth
+                label="Initial Margin"
+              />
             </Grid>
             <Grid item xs={12}>
-              <Button variant="contained" fullWidth color="primary">
-                CREATE MATCH
+              <Button
+                style={{ fontWeight: "bold" }}
+                onClick={createMatch}
+                variant="contained"
+                fullWidth
+                color="primary"
+              >
+                {loading ? (
+                  <CircularProgress style={{ color: "white" }} size={24} />
+                ) : (
+                  "CREATE MATCH"
+                )}
               </Button>
             </Grid>
           </Grid>
@@ -94,4 +158,11 @@ const modalStyle = {
   padding: "10px",
 };
 
-export default MatchModal;
+const mapStateToProps = (state) => {
+  return {
+    contract: state.ethereum.contract,
+    account: state.ethereum.account,
+  };
+};
+
+export default connect(mapStateToProps)(MatchModal);

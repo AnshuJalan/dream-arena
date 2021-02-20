@@ -9,42 +9,32 @@ import {
   Avatar,
   Button,
   TextField,
-  CircularProgress,
   Table,
   TableHead,
   TableRow,
   TableBody,
   TableCell,
+  CircularProgress,
 } from "@material-ui/core";
-import { getContractMatch, getBets } from "../../actions/matchesActions";
+import { getContractMatch } from "../../actions/matchesActions";
 import axios from "axios";
 import Preloader from "../layout/Preloader";
-import history from "../../history";
 
-const MatchesShow = ({
-  matches,
-  getContractMatch,
-  contract,
-  account,
-  getBets,
-  betsA,
-  betsB,
-}) => {
+const MatchesShowAdmin = ({ matches, getContractMatch, contract, account }) => {
   const { id } = useParams();
 
   const [apiData, setApiData] = useState(null);
-  const [teamSelected, setTeamSelected] = useState(0);
-  const [loading, setLoading] = useState(false);
-  const [betAmount, setBetAmount] = useState();
+  const [oddsA, setOddsA] = useState();
+  const [oddsB, setOddsB] = useState();
+  const [margin, setMargin] = useState();
+  const [loadingOdds, setLoadingOdds] = useState(false);
+  const [loadingMargin, setLoadingMargin] = useState(false);
 
   useEffect(() => {
     (async () => {
-      if (contract) {
-        await getContractMatch(id);
-        await getBets(id);
-      }
+      if (contract) await getContractMatch(id);
     })();
-  }, [id, getContractMatch, contract, getBets]);
+  }, [id, getContractMatch, contract]);
 
   const match = matches[id];
 
@@ -61,24 +51,32 @@ const MatchesShow = ({
     return <Preloader />;
   }
 
-  if (match.admin === account) {
-    history.push(`/matches/${match.id}/admin`);
-  }
-
-  const bet = async () => {
+  const changeOdds = async () => {
     try {
-      setLoading(true);
-      await contract.methods.bet(match.id, teamSelected).send({
-        value: parseInt(betAmount * 10 ** 18),
-        from: account,
-      });
-      setLoading(false);
+      setLoadingOdds(true);
+      await contract.methods
+        .changeOdds(match.id, parseInt(oddsA * 100), parseInt(oddsB * 100))
+        .send({ from: account });
+      setLoadingOdds(false);
       window.location.reload();
     } catch (err) {
       alert(err.message);
     }
+    setLoadingOdds(false);
+  };
 
-    setLoading(false);
+  const addMargin = async () => {
+    try {
+      setLoadingMargin(true);
+      await contract.methods
+        .addMargin(match.id)
+        .send({ from: account, value: parseInt(margin * 10 ** 18) });
+      setLoadingMargin(false);
+      window.location.reload();
+    } catch (err) {
+      alert(err.message);
+    }
+    setLoadingMargin(false);
   };
 
   const getImageSection = (team) => {
@@ -90,16 +88,12 @@ const MatchesShow = ({
       backgroundColor: colors[team],
       fontSize: "72px",
       color: "#ffffff",
-      cursor: "pointer",
     };
-    const borderStyle = {
-      padding: teamSelected === team ? "5px" : "10px",
-      border: teamSelected === team ? `5px ${colors[team]} dashed` : "none",
-    };
+
     let avatar;
     if (!opp.image_url) {
       avatar = (
-        <div onClick={() => setTeamSelected(team)} style={borderStyle}>
+        <div>
           <Avatar variant="rounded" style={avatarStyle}>
             {opp.name[0]}
           </Avatar>
@@ -107,7 +101,7 @@ const MatchesShow = ({
       );
     } else {
       avatar = (
-        <div onClick={() => setTeamSelected(team)} style={borderStyle}>
+        <div>
           <Avatar variant="rounded" style={avatarStyle} src={opp.image_url} />
         </div>
       );
@@ -139,26 +133,29 @@ const MatchesShow = ({
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell style={{ fontWeight: "bold" }}>Team</TableCell>
-            <TableCell style={{ fontWeight: "bold" }}>Odds</TableCell>
-            <TableCell style={{ fontWeight: "bold" }}>ETH</TableCell>
+            <TableCell style={{ fontWeight: "bold" }}>Item</TableCell>
+            <TableCell style={{ fontWeight: "bold" }}>ETH </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {Object.keys(betsA).map((key, index) => (
-            <TableRow key={index}>
-              <TableCell>{apiData.opponents[0].opponent.name}</TableCell>
-              <TableCell>{key / 100}</TableCell>
-              <TableCell>{(betsA[key] / 10 ** 18).toFixed(2)}</TableCell>
-            </TableRow>
-          ))}
-          {Object.keys(betsB).map((key, index) => (
-            <TableRow key={index}>
-              <TableCell>{apiData.opponents[1].opponent.name}</TableCell>
-              <TableCell>{key / 100}</TableCell>
-              <TableCell>{(betsB[key] / 10 ** 18).toFixed(2)}</TableCell>
-            </TableRow>
-          ))}
+          <TableRow>
+            <TableCell>Payout A</TableCell>
+            <TableCell>{(match.totalPayoutA / 10 ** 18).toFixed(2)}</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>Payout B</TableCell>
+            <TableCell>{(match.totalPayoutB / 10 ** 18).toFixed(2)}</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>Total Collection</TableCell>
+            <TableCell>
+              {(match.totalCollection / 10 ** 18).toFixed(2)}
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>Bookie Margin</TableCell>
+            <TableCell>{(match.bookieMargin / 10 ** 18).toFixed(2)}</TableCell>
+          </TableRow>
         </TableBody>
       </Table>
     );
@@ -168,7 +165,7 @@ const MatchesShow = ({
     <Grid style={{ height: "100%" }} container spacing={2}>
       <Grid style={gridItemStyle} item container xs={8}>
         <Card style={cardStyle}>
-          <CardHeader title={<h5 style={cardHeader}>PLACE BET</h5>} />
+          <CardHeader title={<h5 style={cardHeader}>ADMIN PANEL</h5>} />
           <CardContent style={{ height: "100%" }}>
             <Grid style={{ height: "65%" }} container spacing={2}>
               <Grid style={gridItemStyle} item xs={5} container>
@@ -180,18 +177,28 @@ const MatchesShow = ({
               <Grid item xs={5} style={gridItemStyle} container>
                 {getImageSection(1)}
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={6}>
                 <TextField
                   fullWidth
+                  id="outlined-basic"
+                  label="Odds Team A"
                   variant="outlined"
-                  label="Bet Amount in ETH"
-                  value={betAmount}
-                  onChange={(e) => setBetAmount(e.target.value)}
+                  value={oddsA}
+                  onChange={(e) => setOddsA(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  fullWidth
+                  id="outlined-basic"
+                  label="Odds Team B"
+                  variant="outlined"
+                  value={oddsB}
+                  onChange={(e) => setOddsB(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
                 <Button
-                  onClick={bet}
                   style={{
                     backgroundColor: "#357a38",
                     color: "#ffffff",
@@ -199,11 +206,12 @@ const MatchesShow = ({
                   }}
                   variant="contained"
                   fullWidth
+                  onClick={changeOdds}
                 >
-                  {loading ? (
+                  {loadingOdds ? (
                     <CircularProgress size={24} style={{ color: "white" }} />
                   ) : (
-                    "PLACE BET"
+                    "CHANGE ODDS"
                   )}
                 </Button>
               </Grid>
@@ -213,28 +221,55 @@ const MatchesShow = ({
       </Grid>
       <Grid style={gridItemStyle} item container xs={4}>
         <Card style={cardStyle}>
-          <CardHeader title={<h5 style={cardHeader}>YOUR BETS</h5>} />
+          <CardHeader title={<h5 style={cardHeader}>MATCH PANEL</h5>} />
           <CardContent
             style={{
               padding: "2px 15px",
               display: "flex",
               justifyContent: "space-between",
               flexDirection: "column",
-              height: "83%",
+              height: "calc(83% - 2px)",
             }}
           >
             {getTable()}
-            <Button
-              style={{ fontWeight: "bold" }}
-              color="secondary"
-              variant="contained"
-              disabled
-              fullWidth
-            >
-              WITHDRAW PAYOUT
-            </Button>
+            <div>
+              <TextField
+                fullWidth
+                variant="outlined"
+                label="Extra Margin in ETH"
+                style={{ marginBottom: "16px" }}
+                value={margin}
+                onChange={(e) => setMargin(e.target.value)}
+              />
+              <Button
+                style={{ fontWeight: "bold" }}
+                fullWidth
+                color="primary"
+                variant="contained"
+                onClick={addMargin}
+              >
+                {loadingMargin ? (
+                  <CircularProgress size={24} style={{ color: "white" }} />
+                ) : (
+                  "ADD MARGIN"
+                )}
+              </Button>
+            </div>
           </CardContent>
         </Card>
+      </Grid>
+      <Grid container item xs={12} alignItems="center" justify="center">
+        <Button
+          style={{
+            backgroundColor: "red",
+            color: "white",
+            fontWeight: "bold",
+            marginBottom: "20px",
+          }}
+          variant="contained"
+        >
+          CLOSE MATCH
+        </Button>
       </Grid>
     </Grid>
   );
@@ -255,11 +290,7 @@ const mapStateToProps = (state) => {
     matches: state.matches,
     contract: state.ethereum.contract,
     account: state.ethereum.account,
-    betsA: state.bets.betsA,
-    betsB: state.bets.betsB,
   };
 };
 
-export default connect(mapStateToProps, { getContractMatch, getBets })(
-  MatchesShow
-);
+export default connect(mapStateToProps, { getContractMatch })(MatchesShowAdmin);

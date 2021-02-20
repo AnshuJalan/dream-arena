@@ -5,6 +5,7 @@ import axios from "axios";
 import { Grid, Paper, Button } from "@material-ui/core";
 import Avt from "../layout/AvatarImg";
 import "../../App.css";
+import Preloader from "../layout/Preloader";
 
 const MatchCard = ({ match }) => {
   const [apiData, setApiData] = useState(null);
@@ -37,7 +38,7 @@ const MatchCard = ({ match }) => {
     );
   };
 
-  if (apiData === null) return <p>Loading...</p>;
+  if (apiData === null) return <Preloader />;
 
   return (
     <div>
@@ -82,7 +83,7 @@ const MatchCard = ({ match }) => {
                 account_balance
               </span>
               <span style={{ fontSize: "15px" }}>
-                {match.totalCollection} ETH
+                {(match.totalCollection / 10 ** 18).toFixed(2)} ETH
               </span>
             </div>
           </Paper>

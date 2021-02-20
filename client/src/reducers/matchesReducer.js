@@ -1,9 +1,13 @@
 import _ from "lodash";
-import { MATCHES_LOADING, GET_CONTRACT_MATCHES, GET_CONTRACT_MATCH } from "../actions/types";
+import {
+  MATCHES_LOADING,
+  GET_CONTRACT_MATCHES,
+  GET_CONTRACT_MATCH,
+} from "../actions/types";
 
 const INITIAL_STATE = {
   matches: [],
-  loading:false
+  loading: true,
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -12,15 +16,14 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         [action.payload.id]: action.payload,
-        loading:false
+        loading: false,
       };
     case GET_CONTRACT_MATCHES:
-      //return { ...state, ..._.mapKeys(action.payload, "id"),loading:false };
-      return { ...state, matches:action.payload,loading:false };
+      return { ...state, matches: action.payload, loading: false };
     case MATCHES_LOADING:
       return {
-          ...state,
-          loading:true
+        ...state,
+        loading: true,
       };
     default:
       return state;

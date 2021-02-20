@@ -9,5 +9,9 @@ a {
 }
 
 .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
-  border-color: white im !important;
+  border-color: white !important;
+}
+
+.MuiFormLabel-root.Mui-focused {
+  color: white !important;
 }
