@@ -1,11 +1,11 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Avatar from '@material-ui/core/Avatar';
+import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import Avatar from "@material-ui/core/Avatar";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: 'flex',
-    '& > *': {
+    display: "flex",
+    "& > *": {
       margin: theme.spacing(1),
     },
   },
@@ -19,17 +19,44 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ImageAvatars({link,letter,index}) {
+export default function ImageAvatars({ link, letter, index }) {
   const classes = useStyles();
-  let array=[]
+  let array = [];
   array.push("#ff2e2e");
-  array.push("#3877ff")
+  array.push("#3877ff");
+
+  const avtStyle = {
+    height: "72px",
+    width: "72px",
+  };
+
   return (
-    <div className={classes.root}>
-      {
-        link ? <Avatar alt="Remy Sharp" src={link} className={classes.large} variant="rounded"/>
-          : <Avatar style={{backgroundColor:array[index],color:"white",fontSize:"1.5rem"}} variant="rounded">{letter}</Avatar>
-      }
+    <div
+      style={{ alignItems: "center", justifyContent: "center" }}
+      className={classes.root}
+    >
+      {link ? (
+        <Avatar
+          alt="Remy Sharp"
+          src={link}
+          className={classes.large}
+          variant="rounded"
+          style={avtStyle}
+        />
+      ) : (
+        <Avatar
+          className={classes.large}
+          style={{
+            ...avtStyle,
+            backgroundColor: array[index],
+            color: "white",
+            fontSize: "1.5rem",
+          }}
+          variant="rounded"
+        >
+          {letter}
+        </Avatar>
+      )}
     </div>
   );
 }

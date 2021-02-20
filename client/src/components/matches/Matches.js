@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
-import CurrentMatch from "./CurrentMatch";
+import MatchCard from "./MatchCard";
 import Preloader from "../layout/Preloader";
 import PropTypes from "prop-types";
 import { getContractMatches } from "../../actions/matchesActions";
@@ -19,12 +19,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const Current = ({
+export const Matches = ({
   matches: { matches, loading },
   getContractMatches,
 }) => {
   const classes = useStyles();
   useEffect(() => {
+    console.log("Here");
     (async () => await getContractMatches())();
     //eslint-disable-next-line
   }, []);
@@ -35,7 +36,6 @@ export const Current = ({
 
   return (
     <div className={classes.root}>
-      <h4 className="center">Current Matches</h4>
       <Grid container spacing={3}>
         {matches.length === 0 ? (
           <p className="center">No Current Matches to show....</p>
@@ -43,7 +43,7 @@ export const Current = ({
           matches.map((match, index) => (
             <Grid key={index} item xs={12} sm={6}>
               <Paper className={classes.paper} elevation={2}>
-                <CurrentMatch match={match} />
+                <MatchCard match={match} />
               </Paper>
             </Grid>
           ))
@@ -53,7 +53,7 @@ export const Current = ({
   );
 };
 
-Current.propTypes = {
+Matches.propTypes = {
   matches: PropTypes.object.isRequired,
 };
 
@@ -61,4 +61,4 @@ const mapStateToProps = (state) => ({
   matches: state.matches,
 });
 
-export default connect(mapStateToProps, { getContractMatches })(Current);
+export default connect(mapStateToProps, { getContractMatches })(Matches);

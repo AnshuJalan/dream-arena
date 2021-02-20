@@ -14,6 +14,7 @@ import { connectWeb3 } from "../../actions/web3Actions";
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
+    marginBottom: "20px",
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -52,7 +53,7 @@ const Navbar = ({ connectWeb3 }) => {
           <Typography variant="h6" className={classes.title}>
             Dream Arena
           </Typography>
-          <Link to="/current">
+          <Link to="/matches">
             <Button className={classes.btn}>
               <span style={{ color: "white" }}>Matches</span>
             </Button>

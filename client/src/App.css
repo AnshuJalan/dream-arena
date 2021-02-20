@@ -1,3 +1,13 @@
-::-webkit-scrollbar{
-  width:0;
+html,
+body,
+#root {
+  height: 100%;
+}
+
+a {
+  text-decoration: none !important;
+}
+
+.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: white im !important;
 }
