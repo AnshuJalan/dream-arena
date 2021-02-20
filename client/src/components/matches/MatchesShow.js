@@ -9,16 +9,19 @@ import {
   Avatar,
   Button,
   TextField,
+  CircularProgress,
 } from "@material-ui/core";
 import { getContractMatch } from "../../actions/matchesActions";
 import axios from "axios";
 import Preloader from "../layout/Preloader";
 
-const MatchesShow = ({ matches, getContractMatch, contract }) => {
+const MatchesShow = ({ matches, getContractMatch, contract, account }) => {
   const { id } = useParams();
 
   const [apiData, setApiData] = useState(null);
   const [teamSelected, setTeamSelected] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [betAmount, setBetAmount] = useState();
 
   useEffect(() => {
     (async () => {
@@ -40,6 +43,22 @@ const MatchesShow = ({ matches, getContractMatch, contract }) => {
   if (!match || !apiData) {
     return <Preloader />;
   }
+
+  const bet = async () => {
+    try {
+      setLoading(true);
+      await contract.methods.bet(match.id, teamSelected).send({
+        value: parseInt(betAmount * 10 ** 18),
+        from: account,
+      });
+      setLoading(false);
+      window.location.reload();
+    } catch (err) {
+      alert(err.message);
+    }
+
+    setLoading(false);
+  };
 
   const getImageSection = (team) => {
     const opp = apiData.opponents[team].opponent;
@@ -115,19 +134,26 @@ const MatchesShow = ({ matches, getContractMatch, contract }) => {
                   fullWidth
                   variant="outlined"
                   label="Bet Amount in ETH"
+                  value={betAmount}
+                  onChange={(e) => setBetAmount(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
                 <Button
+                  onClick={bet}
                   style={{
                     backgroundColor: "#357a38",
                     color: "#ffffff",
                     fontWeight: "bold",
                   }}
                   variant="contained"
-                  disableElevation
+                  fullWidth
                 >
-                  PLACE BET
+                  {loading ? (
+                    <CircularProgress size={24} style={{ color: "white" }} />
+                  ) : (
+                    "PLACE BET"
+                  )}
                 </Button>
               </Grid>
             </Grid>
@@ -157,6 +183,7 @@ const mapStateToProps = (state) => {
   return {
     matches: state.matches,
     contract: state.ethereum.contract,
+    account: state.ethereum.account,
   };
 };
 

@@ -83,7 +83,7 @@ const MatchCard = ({ match }) => {
                 account_balance
               </span>
               <span style={{ fontSize: "15px" }}>
-                {match.totalCollection} ETH
+                {(match.totalCollection / 10 ** 18).toFixed(2)} ETH
               </span>
             </div>
           </Paper>

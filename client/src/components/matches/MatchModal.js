@@ -34,7 +34,7 @@ const MatchModal = ({ open, setCreateModalOpen, match, contract, account }) => {
           url
         )
         .send({
-          value: margin * 10 ** 18,
+          value: parseInt(margin * 10 ** 18),
           from: account,
         });
       setLoading(false);
@@ -128,6 +128,7 @@ const MatchModal = ({ open, setCreateModalOpen, match, contract, account }) => {
             </Grid>
             <Grid item xs={12}>
               <Button
+                style={{ fontWeight: "bold" }}
                 onClick={createMatch}
                 variant="contained"
                 fullWidth
