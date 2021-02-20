@@ -5,6 +5,7 @@ import Upcoming from "./components/matches/Upcoming";
 import MatchesShow from "./components/matches/MatchesShow";
 import MatchesShowAdmin from "./components/matches/MatchesShowAdmin";
 import Matches from "./components/matches/Matches";
+import LandingPage from "./LandingPage";
 import { Provider } from "react-redux";
 import store from "./store";
 import "./App.css";
@@ -16,6 +17,7 @@ function App() {
     <Provider store={store}>
       <Router forceRefresh history={history}>
         <Navbar />
+        <Route exact path="/" component={LandingPage} />
         <Container maxWidth="md">
           <div style={{ height: "92vh", marginTop: "100px" }}>
             <Switch>

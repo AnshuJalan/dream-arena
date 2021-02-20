@@ -10,10 +10,7 @@ export const getMatches = () => async (dispatch) => {
       payload: res.data,
     });
   } catch (err) {
-    dispatch({
-      type: MATCHES_ERROR,
-      payload: err.response.data,
-    });
+    alert(err);
   }
 };
 
