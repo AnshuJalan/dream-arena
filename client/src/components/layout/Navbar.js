@@ -39,32 +39,57 @@ const Navbar = ({ connectWeb3 }) => {
   const classes = useStyles();
   return (
     <div className={classes.root}>
-      <AppBar style={{ backgroundColor: "#303030" }} elevation={1}>
+      <AppBar
+        style={{ backgroundColor: "#303030" }}
+        elevation={loc === "/" ? 0 : 1}
+      >
         <div style={{ width: "90%", margin: "auto" }}>
           <Toolbar>
-            <Typography variant="h6" className={classes.title}>
-              DREAM ARENA
+            <Typography
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justify: "center",
+              }}
+              variant="h6"
+              className={classes.title}
+            >
+              <img
+                style={{ marginRight: "15px" }}
+                width="28"
+                alt="brand"
+                src={process.env.PUBLIC_URL + "/images/brand.svg"}
+              />
+              <Link style={{ color: "white" }} to="/">
+                DREAM ARENA
+              </Link>
             </Typography>
             <Link to="/matches">
               <Button
                 style={
                   loc.includes("matches")
-                    ? { backgroundColor: "#4aedc4", marginRight: "10px" }
-                    : { marginRight: "10px" }
+                    ? {
+                        backgroundColor: "#4aedc4",
+                        color: "black",
+                        marginRight: "10px",
+                      }
+                    : { marginRight: "10px", color: "white" }
                 }
                 className={classes.btn}
               >
-                <span style={{ color: "white" }}>Matches</span>
+                <span>Matches</span>
               </Button>
             </Link>
             <Link to="/upcoming">
               <Button
                 style={
-                  loc.includes("upcoming") ? { backgroundColor: "#4aedc4" } : {}
+                  loc.includes("upcoming")
+                    ? { backgroundColor: "#4aedc4", color: "black" }
+                    : { color: "white" }
                 }
                 className={classes.btn}
               >
-                <span style={{ color: "white" }}>Upcoming</span>
+                <span>Upcoming</span>
               </Button>
             </Link>
           </Toolbar>

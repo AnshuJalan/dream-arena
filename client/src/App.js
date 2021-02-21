@@ -9,8 +9,8 @@ import LandingPage from "./LandingPage";
 import { Provider } from "react-redux";
 import store from "./store";
 import "./App.css";
-import { Container } from "@material-ui/core";
 import history from "./history";
+import ContainerMain from "./components/layout/ContainerMain";
 
 function App() {
   return (
@@ -18,20 +18,18 @@ function App() {
       <Router forceRefresh history={history}>
         <Navbar />
         <Route exact path="/" component={LandingPage} />
-        <Container maxWidth="md">
-          <div style={{ height: "92vh", marginTop: "100px" }}>
-            <Switch>
-              <Route exact path="/upcoming" component={Upcoming} />
-              <Route exact path="/matches" component={Matches} />
-              <Route exact path="/matches/:id" component={MatchesShow} />
-              <Route
-                exact
-                path="/matches/:id/admin"
-                component={MatchesShowAdmin}
-              />
-            </Switch>
-          </div>
-        </Container>
+        <ContainerMain>
+          <Switch>
+            <Route exact path="/upcoming" component={Upcoming} />
+            <Route exact path="/matches" component={Matches} />
+            <Route exact path="/matches/:id" component={MatchesShow} />
+            <Route
+              exact
+              path="/matches/:id/admin"
+              component={MatchesShowAdmin}
+            />
+          </Switch>
+        </ContainerMain>
       </Router>
     </Provider>
   );
