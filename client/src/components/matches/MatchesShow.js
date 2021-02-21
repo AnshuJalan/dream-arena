@@ -36,6 +36,7 @@ const MatchesShow = ({
   const [teamSelected, setTeamSelected] = useState(0);
   const [loading, setLoading] = useState(false);
   const [betAmount, setBetAmount] = useState();
+  const [loadingWithdraw, setLoadingWithdraw] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -65,6 +66,50 @@ const MatchesShow = ({
     history.push(`/matches/${match.id}/admin`);
   }
 
+  const payOutCheck = () => {
+    if (!match.ended) return true;
+
+    if (match.winner === match.teamA && Object.keys(betsA).length > 0)
+      return false;
+    else if (match.winner === match.teamB && Object.keys(betsB).length > 0)
+      return false;
+    else return true;
+  };
+
+  const withdrawPayout = async () => {
+    try {
+      setLoadingWithdraw(true);
+      if (match.winner === match.teamA) {
+        await Promise.all(
+          Object.keys(betsA).map(
+            async (bet) =>
+              await contract.methods
+                .retrievePayout(match.id, parseInt(bet))
+                .send({
+                  from: account,
+                })
+          )
+        );
+      } else {
+        await Promise.all(
+          Object.keys(betsB).map(
+            async (bet) =>
+              await contract.methods
+                .retrievePayout(match.id, parseInt(bet))
+                .send({
+                  from: account,
+                })
+          )
+        );
+      }
+      setLoadingWithdraw(false);
+      window.location.reload();
+    } catch (err) {
+      alert(err.message);
+    }
+    setLoadingWithdraw(false);
+  };
+
   const bet = async () => {
     try {
       setLoading(true);
@@ -92,10 +137,18 @@ const MatchesShow = ({
       color: "#ffffff",
       cursor: "pointer",
     };
-    const borderStyle = {
-      padding: teamSelected === team ? "5px" : "10px",
-      border: teamSelected === team ? `5px ${colors[team]} dashed` : "none",
-    };
+
+    const teams = [match.teamA, match.teamB];
+
+    const borderStyle = match.ended
+      ? {
+          padding: match.winner === teams[team] ? "10px" : "15px",
+          border: match.winner === teams[team] ? `5px #FFD700 solid` : "none",
+        }
+      : {
+          padding: teamSelected === team ? "5px" : "10px",
+          border: teamSelected === team ? `5px ${colors[team]} dashed` : "none",
+        };
     let avatar;
     if (!opp.image_url) {
       avatar = (
@@ -168,7 +221,14 @@ const MatchesShow = ({
     <Grid style={{ height: "100%" }} container spacing={2}>
       <Grid style={gridItemStyle} item container xs={8}>
         <Card style={cardStyle}>
-          <CardHeader title={<h5 style={cardHeader}>PLACE BET</h5>} />
+          <CardHeader
+            title={
+              <h5 style={cardHeader}>
+                <span>PLACE BET</span>
+                {match.ended && <span style={{ color: "red" }}>CLOSED</span>}
+              </h5>
+            }
+          />
           <CardContent style={{ height: "100%" }}>
             <Grid style={{ height: "65%" }} container spacing={2}>
               <Grid style={gridItemStyle} item xs={5} container>
@@ -193,12 +253,13 @@ const MatchesShow = ({
                 <Button
                   onClick={bet}
                   style={{
-                    backgroundColor: "#357a38",
-                    color: "#ffffff",
+                    backgroundColor: match.ended ? "#595959" : "#357a38",
+                    color: !match.ended ? "#ffffff" : "#878787",
                     fontWeight: "bold",
                   }}
                   variant="contained"
                   fullWidth
+                  disabled={match.ended}
                 >
                   {loading ? (
                     <CircularProgress size={24} style={{ color: "white" }} />
@@ -225,13 +286,18 @@ const MatchesShow = ({
           >
             {getTable()}
             <Button
+              onClick={withdrawPayout}
               style={{ fontWeight: "bold" }}
               color="secondary"
               variant="contained"
-              disabled
+              disabled={payOutCheck()}
               fullWidth
             >
-              WITHDRAW PAYOUT
+              {loadingWithdraw ? (
+                <CircularProgress size={24} style={{ color: "white" }} />
+              ) : (
+                "WITHDRAW PAYOUT"
+              )}
             </Button>
           </CardContent>
         </Card>
@@ -240,7 +306,14 @@ const MatchesShow = ({
   );
 };
 
-const cardHeader = { fontWeight: "bold", margin: "0px", fontSize: "18px" };
+const cardHeader = {
+  display: "flex",
+  alignItem: "center",
+  justifyContent: "space-between",
+  fontWeight: "bold",
+  margin: "0px",
+  fontSize: "18px",
+};
 const cardStyle = { height: "95%", width: "100%" };
 const gridItemStyle = {
   display: "flex",
