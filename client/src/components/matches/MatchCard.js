@@ -63,15 +63,21 @@ const MatchCard = ({ match }) => {
             elevation={0}
           >
             <div style={{ display: "flex", justifyContent: "center" }}>
-              <span
-                style={{ fontSize: "20px", marginRight: "5px" }}
-                class="material-icons"
-              >
-                casino
-              </span>
-              <span
-                style={{ fontSize: "15px", fontWeight: "bold" }}
-              >{`${match.oddsA / 100} : ${match.oddsB / 100}`}</span>
+              {match.ended ? (
+                <span style={{ color: "red", fontWeight: "bold" }}>CLOSED</span>
+              ) : (
+                <>
+                  <span
+                    style={{ fontSize: "20px", marginRight: "5px" }}
+                    class="material-icons"
+                  >
+                    casino
+                  </span>
+                  <span
+                    style={{ fontSize: "15px", fontWeight: "bold" }}
+                  >{`${match.oddsA / 100} : ${match.oddsB / 100}`}</span>
+                </>
+              )}
               <span
                 style={{
                   fontSize: "20px",

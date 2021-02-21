@@ -29,6 +29,8 @@ const MatchesShowAdmin = ({ matches, getContractMatch, contract, account }) => {
   const [margin, setMargin] = useState();
   const [loadingOdds, setLoadingOdds] = useState(false);
   const [loadingMargin, setLoadingMargin] = useState(false);
+  const [loadingClose, setLoadingClose] = useState(false);
+  const [loadingWithdraw, setLoadingWithdraw] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -50,6 +52,20 @@ const MatchesShowAdmin = ({ matches, getContractMatch, contract, account }) => {
   if (!match || !apiData) {
     return <Preloader />;
   }
+
+  const withdrawPayout = async () => {
+    try {
+      setLoadingWithdraw(true);
+      await contract.methods.retrieveBookiePayout(match.id).send({
+        from: account,
+      });
+      setLoadingWithdraw(false);
+      window.location.reload();
+    } catch (err) {
+      alert(err.message);
+    }
+    setLoadingWithdraw(false);
+  };
 
   const changeOdds = async () => {
     try {
@@ -79,6 +95,20 @@ const MatchesShowAdmin = ({ matches, getContractMatch, contract, account }) => {
     setLoadingMargin(false);
   };
 
+  const closeMatch = async () => {
+    try {
+      setLoadingClose(true);
+      await contract.methods.closeMatch(match.id).send({
+        from: account,
+      });
+      setLoadingClose(false);
+      window.location.reload();
+    } catch (err) {
+      alert(err.message);
+    }
+    setLoadingClose(false);
+  };
+
   const getImageSection = (team) => {
     const opp = apiData.opponents[team].opponent;
     const colors = ["#ff2e2e", "#3877ff"];
@@ -90,10 +120,17 @@ const MatchesShowAdmin = ({ matches, getContractMatch, contract, account }) => {
       color: "#ffffff",
     };
 
+    const teams = [match.teamA, match.teamB];
+
+    const borderStyle = {
+      padding: match.winner === teams[team] ? "10px" : "15px",
+      border: match.winner === teams[team] ? `5px #FFD700 solid` : "none",
+    };
+
     let avatar;
     if (!opp.image_url) {
       avatar = (
-        <div>
+        <div style={borderStyle}>
           <Avatar variant="rounded" style={avatarStyle}>
             {opp.name[0]}
           </Avatar>
@@ -101,7 +138,7 @@ const MatchesShowAdmin = ({ matches, getContractMatch, contract, account }) => {
       );
     } else {
       avatar = (
-        <div>
+        <div style={borderStyle}>
           <Avatar variant="rounded" style={avatarStyle} src={opp.image_url} />
         </div>
       );
@@ -165,7 +202,14 @@ const MatchesShowAdmin = ({ matches, getContractMatch, contract, account }) => {
     <Grid style={{ height: "100%" }} container spacing={2}>
       <Grid style={gridItemStyle} item container xs={8}>
         <Card style={cardStyle}>
-          <CardHeader title={<h5 style={cardHeader}>ADMIN PANEL</h5>} />
+          <CardHeader
+            title={
+              <h5 style={cardHeader}>
+                <span>ADMIN PANEL</span>
+                {match.ended && <span style={{ color: "red" }}>CLOSED</span>}
+              </h5>
+            }
+          />
           <CardContent style={{ height: "100%" }}>
             <Grid style={{ height: "65%" }} container spacing={2}>
               <Grid style={gridItemStyle} item xs={5} container>
@@ -200,10 +244,11 @@ const MatchesShowAdmin = ({ matches, getContractMatch, contract, account }) => {
               <Grid item xs={12}>
                 <Button
                   style={{
-                    backgroundColor: "#357a38",
-                    color: "#ffffff",
+                    backgroundColor: match.ended ? "#595959" : "#357a38",
+                    color: !match.ended ? "#ffffff" : "#878787",
                     fontWeight: "bold",
                   }}
+                  disabled={match.ended}
                   variant="contained"
                   fullWidth
                   onClick={changeOdds}
@@ -232,50 +277,86 @@ const MatchesShowAdmin = ({ matches, getContractMatch, contract, account }) => {
             }}
           >
             {getTable()}
-            <div>
-              <TextField
-                fullWidth
-                variant="outlined"
-                label="Extra Margin in ETH"
-                style={{ marginBottom: "16px" }}
-                value={margin}
-                onChange={(e) => setMargin(e.target.value)}
-              />
-              <Button
-                style={{ fontWeight: "bold" }}
-                fullWidth
-                color="primary"
-                variant="contained"
-                onClick={addMargin}
-              >
-                {loadingMargin ? (
-                  <CircularProgress size={24} style={{ color: "white" }} />
-                ) : (
-                  "ADD MARGIN"
-                )}
-              </Button>
-            </div>
+            {match.ended ? (
+              <div>
+                {" "}
+                <Button
+                  onClick={withdrawPayout}
+                  style={{
+                    fontWeight: "bold",
+                  }}
+                  fullWidth
+                  disabled={parseInt(match.bookiePayout) === 0}
+                  variant="contained"
+                  color="secondary"
+                >
+                  {loadingWithdraw ? (
+                    <CircularProgress size={24} style={{ color: "white" }} />
+                  ) : (
+                    "WITHDRAW PAYOUT"
+                  )}
+                </Button>
+              </div>
+            ) : (
+              <div>
+                <TextField
+                  fullWidth
+                  variant="outlined"
+                  label="Extra Margin in ETH"
+                  style={{ marginBottom: "16px" }}
+                  value={margin}
+                  onChange={(e) => setMargin(e.target.value)}
+                />
+                <Button
+                  style={{ fontWeight: "bold" }}
+                  fullWidth
+                  color="primary"
+                  variant="contained"
+                  onClick={addMargin}
+                  disabled={match.ended}
+                >
+                  {loadingMargin ? (
+                    <CircularProgress size={24} style={{ color: "white" }} />
+                  ) : (
+                    "ADD MARGIN"
+                  )}
+                </Button>
+              </div>
+            )}
           </CardContent>
         </Card>
       </Grid>
       <Grid container item xs={12} alignItems="center" justify="center">
         <Button
+          onClick={closeMatch}
           style={{
-            backgroundColor: "red",
-            color: "white",
+            backgroundColor: match.ended ? "#595959" : "red",
+            color: !match.ended ? "#ffffff" : "#878787",
             fontWeight: "bold",
             marginBottom: "20px",
           }}
+          disabled={match.ended}
           variant="contained"
         >
-          CLOSE MATCH
+          {loadingClose ? (
+            <CircularProgress size={24} style={{ color: "white" }} />
+          ) : (
+            "CLOSE MATCH"
+          )}
         </Button>
       </Grid>
     </Grid>
   );
 };
 
-const cardHeader = { fontWeight: "bold", margin: "0px", fontSize: "18px" };
+const cardHeader = {
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
+  fontWeight: "bold",
+  margin: "0px",
+  fontSize: "18px",
+};
 const cardStyle = { height: "95%", width: "100%" };
 const gridItemStyle = {
   display: "flex",
