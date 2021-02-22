@@ -281,7 +281,7 @@ const MatchesShow = ({
               display: "flex",
               justifyContent: "space-between",
               flexDirection: "column",
-              height: "83%",
+              height: "calc(83% - 2px)",
             }}
           >
             {getTable()}

@@ -11,6 +11,7 @@ import store from "./store";
 import "./App.css";
 import history from "./history";
 import ContainerMain from "./components/layout/ContainerMain";
+import Warning from "./components/NetworkWarning";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
             <Route exact path="/upcoming" component={Upcoming} />
             <Route exact path="/matches" component={Matches} />
             <Route exact path="/matches/:id" component={MatchesShow} />
+            <Route exact path="/warning" component={Warning} />
             <Route
               exact
               path="/matches/:id/admin"

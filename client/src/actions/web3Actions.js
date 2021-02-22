@@ -1,5 +1,6 @@
 import Web3 from "web3";
 import ArenaJson from "../contracts/Arena.json";
+import history from "../history";
 import { CONNECT_WEB3, LOAD_CONTRACT } from "./types";
 
 export const connectWeb3 = () => async (dispatch) => {
@@ -20,6 +21,11 @@ export const connectWeb3 = () => async (dispatch) => {
       account: accounts[0],
     },
   });
+
+  const id = await web3.eth.net.getId();
+  if (id !== 42 && history.location.pathname !== "/warning") {
+    history.push("/warning");
+  }
 
   dispatch(loadContract());
 };

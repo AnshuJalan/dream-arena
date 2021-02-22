@@ -69,7 +69,7 @@ const MatchCard = ({ match }) => {
                 <>
                   <span
                     style={{ fontSize: "20px", marginRight: "5px" }}
-                    class="material-icons"
+                    className="material-icons"
                   >
                     casino
                   </span>
@@ -84,7 +84,7 @@ const MatchCard = ({ match }) => {
                   marginLeft: "25px",
                   marginRight: "5px",
                 }}
-                class="material-icons"
+                className="material-icons"
               >
                 account_balance
               </span>

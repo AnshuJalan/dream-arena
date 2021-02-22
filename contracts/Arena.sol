@@ -198,7 +198,7 @@ contract Arena is Finalizer, Reputation{
   } 
 
   /**
-  * @notice allows the owner of the dapp, to margin call a bookie
+  * @notice allows the owner of the dapp to margin call a bookie
   */
   function marginCall(uint256 _matchId) public {
     require(msg.sender == owner, "not authorized");
@@ -224,6 +224,7 @@ contract Arena is Finalizer, Reputation{
     require(_match.ended, "match is yet to end");
     require(_match.bookiePayout > 0, "no payout");
     uint256 _amt = _match.bookiePayout;
+    _match.bookiePayout = 0;
     (bool success, ) = msg.sender.call.value(_amt)(""); 
     require(success, "transaction failed");
   }
