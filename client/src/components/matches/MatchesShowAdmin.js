@@ -127,11 +127,29 @@ const MatchesShowAdmin = ({ matches, getContractMatch, contract, account }) => {
       border: match.winner === teams[team] ? `5px #FFD700 solid` : "none",
     };
 
+    let winTag = {
+      height: match.winner === teams[team] ? "5vw" : "0vw",
+      width: match.winner === teams[team] ? "5vw" : "0vw",
+      position: "absolute",
+      zIndex: "100000",
+      bottom: "0px",
+      right: "0px",
+      display: "block",
+    };
+
     let avatar;
     if (!opp.image_url) {
       avatar = (
         <div style={borderStyle}>
           <Avatar variant="rounded" style={avatarStyle}>
+            {match.ended && match.winner === teams[team] ? (
+              <img
+                src={process.env.PUBLIC_URL + "/images/winnerTag.png"}
+                style={winTag}
+              />
+            ) : (
+              <></>
+            )}
             {opp.name[0]}
           </Avatar>
         </div>
@@ -139,6 +157,25 @@ const MatchesShowAdmin = ({ matches, getContractMatch, contract, account }) => {
     } else {
       avatar = (
         <div style={borderStyle}>
+          {match.ended && match.winner === teams[team] ? (
+            <CusAvatar
+              variant="rounded"
+              style={{ ...avatarStyle, position: "relative" }}
+              src={opp.image_url}
+              otherChild={
+                <img
+                  src={process.env.PUBLIC_URL + "/images/winnerTag.png"}
+                  style={{ ...winTag }}
+                />
+              }
+            ></CusAvatar>
+          ) : (
+            <Avatar
+              variant="rounded"
+              style={{ ...avatarStyle, position: "relative" }}
+              src={opp.image_url}
+            ></Avatar>
+          )}
           <Avatar variant="rounded" style={avatarStyle} src={opp.image_url} />
         </div>
       );
