@@ -22,7 +22,6 @@ export const styles = (theme) => ({
     overflow: 'hidden',
     userSelect: 'none',
   },
-  /* Styles applied to the root element if not `src` or `srcSet`. */
   colorDefault: {
     color: theme.palette.background.default,
     backgroundColor:

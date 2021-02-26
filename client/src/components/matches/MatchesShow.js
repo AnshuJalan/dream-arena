@@ -178,16 +178,14 @@ const MatchesShow = ({
     } else {
       avatar = (
         <div onClick={handleSelection} style={borderStyle}>
-          {match.ended && match.winner===teams[team]?
+          {
+            match.ended && match.winner===teams[team]?
               <CusAvatar variant="rounded" style={{...avatarStyle,position:"relative"}} src={opp.image_url} 
                 otherChild={<img src={process.env.PUBLIC_URL+"/images/winnerTag.png"} style={{...winTag}}/>} >
                 </CusAvatar>
             : <Avatar variant="rounded" style={{...avatarStyle,position:"relative"}} src={opp.image_url}>
             </Avatar>
           }
-          {/* {<img src={process.env.PUBLIC_URL+"/images/winnerTag.png"} style={{...winTag}}/>:<></>} */}
-
-          {/* <img src={process.env.PUBLIC_URL + "/images/winnerTag.png"} style={winTag}/> */}
         </div>
       );
     }
