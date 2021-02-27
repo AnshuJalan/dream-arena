@@ -1,6 +1,8 @@
 const HDWalletProvider = require("@truffle/hdwallet-provider");
+const path = require("path");
 
 module.exports = {
+  contracts_build_directory: path.join(__dirname, "client/src/contracts"),
   networks: {
     cldev: {
       host: "127.0.0.1",
@@ -12,11 +14,11 @@ module.exports = {
       port: 7545,
       network_id: "*",
     },
-    kovan: {
+    matic: {
       provider: () => {
         return new HDWalletProvider(
           "trust stage foster bundle usual letter veteran claw fat rebuild artefact flip",
-          "https://kovan.infura.io/v3/9af628a1de16445dac2e54ae3176798a"
+          "https://rpc-mumbai.matic.today"
         );
       },
       network_id: "*",

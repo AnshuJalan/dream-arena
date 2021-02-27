@@ -13,13 +13,21 @@ const Warning = () => {
     >
       <img src={process.env.PUBLIC_URL + "/images/network.png"} width={128} />
 
-      <span style={{ marginTop: "24px", fontWeight: "bold", fontSize: "32px" }}>
-        PLEASE SWITCH TO KOVAN TEST NETWORK
+      <span
+        style={{
+          marginTop: "24px",
+          fontWeight: "bold",
+          fontSize: "32px",
+          textAlign: "center",
+          marginBottom: "20px",
+        }}
+      >
+        PLEASE SWITCH TO ETHEREUM KOVAN OR MATIC TEST NETWORK
       </span>
 
       <a style={{ color: "white" }} href="/matches">
         <span style={{ textDecoration: "underline" }}>
-          Click here after switching to Kovan
+          Click here after switching
         </span>
       </a>
     </div>

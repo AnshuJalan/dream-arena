@@ -15,9 +15,9 @@ contract Finalizer is ChainlinkClient {
   mapping(bytes32 => uint256) requestIdToMatch;
 
   constructor() public {
-    setPublicChainlinkToken();
-    oracle = 0x56dd6586DB0D08c6Ce7B2f2805af28616E082455;
-    jobId = "b6602d14e4734c49a5e1ce19d45a4632";
+    setChainlinkToken(0x326C977E6efc84E512bB9C30f76E30c160eD06FB);
+    oracle = 0xb33D8A4e62236eA91F3a8fD7ab15A95B9B7eEc7D;
+    jobId = "5592aa6da3d64580933fce0401d373f0";
     fee = 0.1 * 10 ** 18;
   }
 

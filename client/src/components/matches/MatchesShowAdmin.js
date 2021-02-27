@@ -20,7 +20,13 @@ import { getContractMatch } from "../../actions/matchesActions";
 import axios from "axios";
 import Preloader from "../layout/Preloader";
 
-const MatchesShowAdmin = ({ matches, getContractMatch, contract, account }) => {
+const MatchesShowAdmin = ({
+  matches,
+  getContractMatch,
+  contract,
+  account,
+  network,
+}) => {
   const { id } = useParams();
 
   const [apiData, setApiData] = useState(null);
@@ -176,7 +182,7 @@ const MatchesShowAdmin = ({ matches, getContractMatch, contract, account }) => {
               src={opp.image_url}
             ></Avatar>
           )}
-          <Avatar variant="rounded" style={avatarStyle} src={opp.image_url} />
+          {/* <Avatar variant="rounded" style={avatarStyle} src={opp.image_url} /> */}
         </div>
       );
     }
@@ -208,7 +214,9 @@ const MatchesShowAdmin = ({ matches, getContractMatch, contract, account }) => {
         <TableHead>
           <TableRow>
             <TableCell style={{ fontWeight: "bold" }}>Item</TableCell>
-            <TableCell style={{ fontWeight: "bold" }}>ETH </TableCell>
+            <TableCell style={{ fontWeight: "bold" }}>
+              {network === 42 ? "ETH" : "MATIC"}
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -339,7 +347,7 @@ const MatchesShowAdmin = ({ matches, getContractMatch, contract, account }) => {
                 <TextField
                   fullWidth
                   variant="outlined"
-                  label="Extra Margin in ETH"
+                  label={`Extra Margin in ${network === 42 ? "ETH" : "MATIC"}`}
                   style={{ marginBottom: "16px" }}
                   value={margin}
                   onChange={(e) => setMargin(e.target.value)}
@@ -408,6 +416,7 @@ const mapStateToProps = (state) => {
     matches: state.matches,
     contract: state.ethereum.contract,
     account: state.ethereum.account,
+    network: state.ethereum.network,
   };
 };
 

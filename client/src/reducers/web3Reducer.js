@@ -4,6 +4,7 @@ const INITIAL_STATE = {
   web3: null,
   account: null,
   contract: null,
+  network: null,
 };
 
 export default (state = INITIAL_STATE, action) => {

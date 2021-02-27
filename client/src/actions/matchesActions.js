@@ -12,6 +12,8 @@ export const getContractMatches = () => async (dispatch, getState) => {
     dispatch(matchesLoading());
     const uuid = await contract.methods.uuid().call();
 
+    console.log(uuid);
+
     let matches = [];
     for (let i = 1; i < uuid; i++) {
       const match = await contract.methods.idToMatch(i).call();

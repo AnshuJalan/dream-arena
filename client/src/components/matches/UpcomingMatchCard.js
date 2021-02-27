@@ -5,12 +5,12 @@ import Grid from "@material-ui/core/Grid";
 import Avt from "../layout/AvatarImg";
 import { Button, Paper } from "@material-ui/core";
 import MatchModal from "./MatchModal";
-import MatchInfo from "./MatchInfoModal"
+import MatchInfo from "./MatchInfoModal";
 
 export const UpcomingMatchCard = ({ match }) => {
   const [createModalOpen, setCreateModalOpen] = useState(false);
-  const [createInfoModalOpen,setCreateInfoModalOpen] = useState(false);
-  
+  const [createInfoModalOpen, setCreateInfoModalOpen] = useState(false);
+
   const getDetails = (team) => {
     const opp = match.opponents[team].opponent;
 
@@ -39,7 +39,7 @@ export const UpcomingMatchCard = ({ match }) => {
       >
         <span
           style={{ fontSize: "15px", marginRight: "3px" }}
-          class="material-icons"
+          className="material-icons"
         >
           calendar_today
         </span>
@@ -47,7 +47,7 @@ export const UpcomingMatchCard = ({ match }) => {
           1}-${date.getDate()}-${date.getFullYear()}`}</span>
         <span
           style={{ fontSize: "15px", marginRight: "3px", marginLeft: "15px" }}
-          class="material-icons"
+          className="material-icons"
         >
           schedule
         </span>

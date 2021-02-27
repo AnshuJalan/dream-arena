@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useParams } from "react-router-dom";
-import CusAvatar from "../layout/CustomizedAvatar"
+import CusAvatar from "../layout/CustomizedAvatar";
 import {
   Card,
   CardContent,
@@ -28,6 +28,7 @@ const MatchesShow = ({
   contract,
   account,
   getBets,
+  network,
   betsA,
   betsB,
 }) => {
@@ -140,15 +141,15 @@ const MatchesShow = ({
     };
 
     const teams = [match.teamA, match.teamB];
-    
-    let winTag={
-      height:match.winner===teams[team]?"5vw":"0vw",
-      width:match.winner===teams[team]?"5vw":"0vw",
-      position:"absolute",
-      zIndex:"100000",
-      bottom : "0px",
-      right : "0px",
-      display:"block"
+
+    let winTag = {
+      height: match.winner === teams[team] ? "5vw" : "0vw",
+      width: match.winner === teams[team] ? "5vw" : "0vw",
+      position: "absolute",
+      zIndex: "100000",
+      bottom: "0px",
+      right: "0px",
+      display: "block",
     };
 
     const borderStyle = match.ended
@@ -160,36 +161,54 @@ const MatchesShow = ({
           padding: teamSelected === team ? "5px" : "10px",
           border: teamSelected === team ? `5px ${colors[team]} dashed` : "none",
         };
-    const handleSelection = ()=>{
-      setTeamSelected(team)
-    }    
+    const handleSelection = () => {
+      setTeamSelected(team);
+    };
     let avatar;
     if (!opp.image_url) {
       avatar = (
-        <div onClick={handleSelection} style={{...borderStyle}}>
-          
-          <Avatar variant="rounded" style={{...avatarStyle,position:"relative"}}>
-            {match.ended && match.winner===teams[team]?<img src={process.env.PUBLIC_URL+"/images/winnerTag.png"} style={winTag}/>:<></>}
+        <div onClick={handleSelection} style={{ ...borderStyle }}>
+          <Avatar
+            variant="rounded"
+            style={{ ...avatarStyle, position: "relative" }}
+          >
+            {match.ended && match.winner === teams[team] ? (
+              <img
+                src={process.env.PUBLIC_URL + "/images/winnerTag.png"}
+                style={winTag}
+              />
+            ) : (
+              <></>
+            )}
             {opp.name[0]}
           </Avatar>
-          
         </div>
       );
     } else {
       avatar = (
         <div onClick={handleSelection} style={borderStyle}>
-          {
-            match.ended && match.winner===teams[team]?
-              <CusAvatar variant="rounded" style={{...avatarStyle,position:"relative"}} src={opp.image_url} 
-                otherChild={<img src={process.env.PUBLIC_URL+"/images/winnerTag.png"} style={{...winTag}}/>} >
-                </CusAvatar>
-            : <Avatar variant="rounded" style={{...avatarStyle,position:"relative"}} src={opp.image_url}>
-            </Avatar>
-          }
+          {match.ended && match.winner === teams[team] ? (
+            <CusAvatar
+              variant="rounded"
+              style={{ ...avatarStyle, position: "relative" }}
+              src={opp.image_url}
+              otherChild={
+                <img
+                  src={process.env.PUBLIC_URL + "/images/winnerTag.png"}
+                  style={{ ...winTag }}
+                />
+              }
+            ></CusAvatar>
+          ) : (
+            <Avatar
+              variant="rounded"
+              style={{ ...avatarStyle, position: "relative" }}
+              src={opp.image_url}
+            ></Avatar>
+          )}
         </div>
       );
     }
-    
 
     return (
       <React.Fragment>
@@ -219,7 +238,9 @@ const MatchesShow = ({
           <TableRow>
             <TableCell style={{ fontWeight: "bold" }}>Team</TableCell>
             <TableCell style={{ fontWeight: "bold" }}>Odds</TableCell>
-            <TableCell style={{ fontWeight: "bold" }}>ETH</TableCell>
+            <TableCell style={{ fontWeight: "bold" }}>
+              {network === 42 ? "ETH" : "MATIC"}
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -269,7 +290,7 @@ const MatchesShow = ({
                 <TextField
                   fullWidth
                   variant="outlined"
-                  label="Bet Amount in ETH"
+                  label={`Bet Amount in ${network === 42 ? "ETH" : "MATIC"}`}
                   value={betAmount}
                   onChange={(e) => setBetAmount(e.target.value)}
                 />
@@ -353,6 +374,7 @@ const mapStateToProps = (state) => {
     matches: state.matches,
     contract: state.ethereum.contract,
     account: state.ethereum.account,
+    network: state.ethereum.network,
     betsA: state.bets.betsA,
     betsB: state.bets.betsB,
   };

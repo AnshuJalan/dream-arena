@@ -13,17 +13,18 @@ export const connectWeb3 = () => async (dispatch) => {
   }
 
   const accounts = await web3.eth.getAccounts();
+  const id = await web3.eth.net.getId();
 
   dispatch({
     type: CONNECT_WEB3,
     payload: {
       web3,
       account: accounts[0],
+      network: id,
     },
   });
 
-  const id = await web3.eth.net.getId();
-  if (id !== 42 && history.location.pathname !== "/warning") {
+  if (id !== 42 && id !== 80001 && history.location.pathname !== "/warning") {
     history.push("/warning");
   }
 
@@ -32,9 +33,13 @@ export const connectWeb3 = () => async (dispatch) => {
 
 const loadContract = () => async (dispatch, getState) => {
   const web3 = getState().ethereum.web3;
+  const id = await web3.eth.net.getId();
+
+  if (id !== 42 && id !== 80001) return;
+
   const contract = new web3.eth.Contract(
     ArenaJson.abi,
-    ArenaJson.networks[42].address
+    ArenaJson.networks[id].address
   );
 
   dispatch({

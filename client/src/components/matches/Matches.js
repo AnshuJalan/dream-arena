@@ -27,9 +27,9 @@ export const Matches = ({
   const classes = useStyles();
   useEffect(() => {
     (async () => {
-      if (contract && matches.length === 0) getContractMatches();
+      if (contract) getContractMatches();
     })();
-  }, [contract, getContractMatches, matches]);
+  }, [contract, getContractMatches]);
 
   if (loading) {
     return <Preloader />;

@@ -6,8 +6,9 @@ import { Grid, Paper, Button } from "@material-ui/core";
 import Avt from "../layout/AvatarImg";
 import "../../App.css";
 import Preloader from "../layout/Preloader";
+import { connect } from "react-redux";
 
-const MatchCard = ({ match }) => {
+const MatchCard = ({ match, network }) => {
   const [apiData, setApiData] = useState(null);
 
   const { apiUrl } = match;
@@ -89,7 +90,8 @@ const MatchCard = ({ match }) => {
                 account_balance
               </span>
               <span style={{ fontSize: "15px" }}>
-                {(match.totalCollection / 10 ** 18).toFixed(2)} ETH
+                {(match.totalCollection / 10 ** 18).toFixed(2)}{" "}
+                {network === 42 ? "ETH" : "MATIC"}
               </span>
             </div>
           </Paper>
@@ -118,4 +120,10 @@ MatchCard.propTypes = {
   match: PropTypes.object.isRequired,
 };
 
-export default MatchCard;
+const mapStateToProps = (state) => {
+  return {
+    network: state.ethereum.network,
+  };
+};
+
+export default connect(mapStateToProps)(MatchCard);
