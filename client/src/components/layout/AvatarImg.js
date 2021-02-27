@@ -42,7 +42,7 @@ export default function ImageAvatars({ link, letter, index }) {
           className={classes.large}
           variant="rounded"
           style={avtStyle}
-        />
+        ></Avatar>
       ) : (
         <Avatar
           className={classes.large}

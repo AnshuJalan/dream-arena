@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useParams } from "react-router-dom";
+import CusAvatar from "../layout/CustomizedAvatar"
 import {
   Card,
   CardContent,
@@ -139,6 +140,16 @@ const MatchesShow = ({
     };
 
     const teams = [match.teamA, match.teamB];
+    
+    let winTag={
+      height:match.winner===teams[team]?"5vw":"0vw",
+      width:match.winner===teams[team]?"5vw":"0vw",
+      position:"absolute",
+      zIndex:"100000",
+      bottom : "0px",
+      right : "0px",
+      display:"block"
+    };
 
     const borderStyle = match.ended
       ? {
@@ -149,22 +160,36 @@ const MatchesShow = ({
           padding: teamSelected === team ? "5px" : "10px",
           border: teamSelected === team ? `5px ${colors[team]} dashed` : "none",
         };
+    const handleSelection = ()=>{
+      setTeamSelected(team)
+    }    
     let avatar;
     if (!opp.image_url) {
       avatar = (
-        <div onClick={() => setTeamSelected(team)} style={borderStyle}>
-          <Avatar variant="rounded" style={avatarStyle}>
+        <div onClick={handleSelection} style={{...borderStyle}}>
+          
+          <Avatar variant="rounded" style={{...avatarStyle,position:"relative"}}>
+            {match.ended && match.winner===teams[team]?<img src={process.env.PUBLIC_URL+"/images/winnerTag.png"} style={winTag}/>:<></>}
             {opp.name[0]}
           </Avatar>
+          
         </div>
       );
     } else {
       avatar = (
-        <div onClick={() => setTeamSelected(team)} style={borderStyle}>
-          <Avatar variant="rounded" style={avatarStyle} src={opp.image_url} />
+        <div onClick={handleSelection} style={borderStyle}>
+          {
+            match.ended && match.winner===teams[team]?
+              <CusAvatar variant="rounded" style={{...avatarStyle,position:"relative"}} src={opp.image_url} 
+                otherChild={<img src={process.env.PUBLIC_URL+"/images/winnerTag.png"} style={{...winTag}}/>} >
+                </CusAvatar>
+            : <Avatar variant="rounded" style={{...avatarStyle,position:"relative"}} src={opp.image_url}>
+            </Avatar>
+          }
         </div>
       );
     }
+    
 
     return (
       <React.Fragment>
