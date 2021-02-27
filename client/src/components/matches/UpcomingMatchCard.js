@@ -5,10 +5,12 @@ import Grid from "@material-ui/core/Grid";
 import Avt from "../layout/AvatarImg";
 import { Button, Paper } from "@material-ui/core";
 import MatchModal from "./MatchModal";
+import MatchInfo from "./MatchInfoModal"
 
 export const UpcomingMatchCard = ({ match }) => {
   const [createModalOpen, setCreateModalOpen] = useState(false);
-
+  const [createInfoModalOpen,setCreateInfoModalOpen] = useState(false);
+  
   const getDetails = (team) => {
     const opp = match.opponents[team].opponent;
 
@@ -83,6 +85,20 @@ export const UpcomingMatchCard = ({ match }) => {
         <Grid item xs={12}>
           <Button
             style={{
+              backgroundColor: "#408cff",
+              color: "#ffffff",
+              fontWeight: "bold",
+            }}
+            onClick={() => setCreateInfoModalOpen(true)}
+            variant="contained"
+            fullWidth
+          >
+            SHOW MORE
+          </Button>
+        </Grid>
+        <Grid item xs={12}>
+          <Button
+            style={{
               backgroundColor: "#e94560",
               color: "#ffffff",
               fontWeight: "bold",
@@ -98,6 +114,11 @@ export const UpcomingMatchCard = ({ match }) => {
       <MatchModal
         open={createModalOpen}
         setCreateModalOpen={setCreateModalOpen}
+        match={match}
+      />
+      <MatchInfo
+        open={createInfoModalOpen}
+        setCreateModalOpen={setCreateInfoModalOpen}
         match={match}
       />
     </div>
