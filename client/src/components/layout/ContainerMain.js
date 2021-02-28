@@ -8,7 +8,7 @@ const ContainerMain = (props) => {
   return (
     <Container maxWidth="md">
       <div
-        style={{ height: path === "/" ? "0vh" : "92vh", marginTop: "100px" }}
+        style={{ height: path === "/" ? "0vh" : "85vh", marginTop: "100px" }}
       >
         {props.children}
       </div>

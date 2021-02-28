@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
@@ -7,7 +7,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import { connectWeb3 } from "../../actions/web3Actions";
-import { Paper } from "@material-ui/core";
+import { Paper, Menu, MenuItem } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -30,12 +30,37 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-const Navbar = ({ connectWeb3, network }) => {
+const Navbar = ({ connectWeb3, network, account }) => {
   useEffect(() => {
-    connectWeb3();
+    connectWeb3(-1);
   }, []);
 
   const loc = useLocation().pathname;
+
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleMetamask = () => {
+    setAnchorEl(null);
+    connectWeb3(1);
+  };
+
+  const handlePortisMatic = () => {
+    setAnchorEl(null);
+    connectWeb3(2);
+  };
+
+  const handlePortisKovan = () => {
+    setAnchorEl(null);
+    connectWeb3(3);
+  };
 
   const classes = useStyles();
   return (
@@ -110,7 +135,7 @@ const Navbar = ({ connectWeb3, network }) => {
                   {" "}
                   <span
                     style={{
-                      color: network === 42 ? "#7700ff" : "#5DD395",
+                      color: network === 42 ? "#0f71b7" : "#5DD395",
                       fontSize: "18px",
                       marginRight: "10px",
                     }}
@@ -134,6 +159,37 @@ const Navbar = ({ connectWeb3, network }) => {
                 </>
               )}
             </Paper>
+            <Paper
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                padding: "8px 12px",
+                fontWeight: "bold",
+                marginLeft: "10px",
+                cursor: "pointer",
+              }}
+              onClick={handleClick}
+            >
+              <span className="material-icons">account_balance_wallet</span>
+              <span className="material-icons">arrow_drop_down</span>
+              <span>{account && account.slice(0, 10)}...</span>
+            </Paper>
+            <Menu
+              anchorEl={anchorEl}
+              open={Boolean(anchorEl)}
+              onClose={handleClose}
+              getContentAnchorEl={null}
+              anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+            >
+              <MenuItem onClick={handleMetamask}>Connect Metamask</MenuItem>
+              <MenuItem onClick={handlePortisMatic}>
+                Connect Portis (Matic)
+              </MenuItem>
+              <MenuItem onClick={handlePortisKovan}>
+                Connect Portis (Kovan)
+              </MenuItem>
+            </Menu>
           </Toolbar>
         </div>
       </AppBar>
@@ -144,6 +200,7 @@ const Navbar = ({ connectWeb3, network }) => {
 const mapStateToProps = (state) => {
   return {
     network: state.ethereum.network,
+    account: state.ethereum.account,
   };
 };
 

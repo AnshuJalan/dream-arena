@@ -4,6 +4,10 @@ body,
   font-family: "Roboto", sans-serif;
 }
 
+body {
+  height: 77vh;
+}
+
 a {
   text-decoration: none !important;
 }

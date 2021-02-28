@@ -4,11 +4,8 @@ import { Link } from "react-router-dom";
 
 const LandingPage = () => {
   return (
-    <React.Fragment>
-      <Grid
-        style={{ width: "90%", margin: "auto", marginTop: "150px" }}
-        container
-      >
+    <div style={{ marginTop: "150px" }}>
+      <Grid style={{ width: "90%", margin: "auto" }} container>
         <Grid
           style={{
             display: "flex",
@@ -54,7 +51,7 @@ const LandingPage = () => {
           />
         </Grid>
       </Grid>
-    </React.Fragment>
+    </div>
   );
 };
 export default LandingPage;
