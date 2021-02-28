@@ -19,6 +19,7 @@ import {
 import { getContractMatch } from "../../actions/matchesActions";
 import axios from "axios";
 import Preloader from "../layout/Preloader";
+import CusAvatar from "../layout/CustomizedAvatar";
 
 const MatchesShowAdmin = ({
   matches,
