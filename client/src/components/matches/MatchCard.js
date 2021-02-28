@@ -17,7 +17,7 @@ const MatchCard = ({ match, network }) => {
     (async () => {
       const config = {
         method: "get",
-        url: `${apiUrl}`,
+        url: `https://tranquil-escarpment-56296.herokuapp.com/${apiUrl}`,
       };
       const res = await axios(config);
       setApiData(res.data);

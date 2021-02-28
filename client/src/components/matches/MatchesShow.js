@@ -54,7 +54,9 @@ const MatchesShow = ({
   useEffect(() => {
     if (match) {
       (async () => {
-        const res = await axios.get(match.apiUrl);
+        const res = await axios.get(
+          "https://tranquil-escarpment-56296.herokuapp.com/" + match.apiUrl
+        );
         setApiData(res.data);
       })();
     }
